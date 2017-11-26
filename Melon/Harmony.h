@@ -1,5 +1,4 @@
 #pragma once
-#include "MelonUtil.h"
 #include "Modes.h"
 #include "Substitutions.h"
 #include "ConceptChord.cpp"
@@ -8,7 +7,8 @@ typedef vector<ConceptChord> Progression;
 
 #define melonException int
 #define VARIATION_FUNCTION_POINTER melonException (*)(Progression&)
-
+#define VARIATION_SUCCESS 1
+#define VARIATION_FAILURE 0
 vector<Progression> hsuList =
 {
     // Basic Harmonic Strucutal Unit families
@@ -61,144 +61,175 @@ vector<Progression> hsuList =
 //
 
 // Add tonic in front of the progression
-int hsuVariation1(Progression& oProgression)
+int hsuBasicVariation_AddTonicAtBeggining(Progression& oProgression)
 {
   if (oProgression[0] != ConceptChord(1))
   {
      oProgression.insert(oProgression.begin(), ConceptChord(1));
-     return 1;
+     return VARIATION_SUCCESS;
   }
-  return 0;
+  return VARIATION_FAILURE;
 }
 
 // Substitute V-I resolution for V-(IV|VI)
-int hsuVariation2(Progression& oProgression)
+int hsuBasicVariation_SubstituteFiveOneResolution(Progression& oProgression)
 {
   int wProgSize = oProgression.size();
   if ( oProgression[wProgSize - 1] == ConceptChord(1) &&
        oProgression[wProgSize - 1] == ConceptChord(5) )
   {
-     if ( YesOrNo() )
+     if (Probability(50))
      {
        oProgression[wProgSize - 1] = ConceptChord(4);
-       return 1;
+       return VARIATION_SUCCESS;
      }
      else
      {
        oProgression[wProgSize - 1] = ConceptChord(6);
-       return 1;
+       return VARIATION_SUCCESS;
      }
   }
-
-  return 0;
+  return VARIATION_FAILURE;
 }
 
 // Stop oProgression after V
-int hsuVariation3(Progression& oProgression)
+int hsuBasicVariation_StopProgAfterDominant(Progression& oProgression)
 {
       for (unsigned int i = 1; i < oProgression.size(); ++i)
       {
              if (oProgression[i] == ConceptChord(5))
              {
                    oProgression.erase(oProgression.begin() + (++i), oProgression.end());
-                   return 1;
+                   return VARIATION_SUCCESS;
              }
       }
-      return 0;
+      return VARIATION_FAILURE;
 }
 
 // HSU variations functions list
-vector<VARIATION_FUNCTION_POINTER> hsuVariationFunctions =
+vector<VARIATION_FUNCTION_POINTER> hsuBasicVariationFunctions =
 {
-      hsuVariation1,
-      hsuVariation2,
-      hsuVariation3
+      hsuBasicVariation_AddTonicAtBeggining,
+      hsuBasicVariation_SubstituteFiveOneResolution,
+      hsuBasicVariation_StopProgAfterDominant
 };
 
 
 
 //
-// VARIATIONS ON HARMONIC STRUCTURAL UNITS
+// GENERIC VARIATIONS
 //
 
-void hsuVariation(Progression& oProgression, int iVariationAmount)
+// Substitute a chord
+// This function will randomly attempt substitution on chords of the progression, until it succeeds
+// or fails after trying every chord of the progression.
+int hsuGenericVariation_Substitution(Progression& oProgression)
 {
-    bool wAttemptSuccessful = false;
+    vector<int> wRemainingChords;
+    for(int i = 0; i < oProgression.size(); ++i)
+    {
+        wRemainingChords.push_back(i);
+    }
 
+    int wProgIndex;
+
+    for(int i = 0; i < oProgression.size(); ++i)
+    {
+        wProgIndex = randVectorIndex(wRemainingChords);
+        int wTargetConceptChordDegree = oProgression[wProgIndex].mDegree;
+
+        // If the targeted degree has available substitutions
+        if(Substitutions::genericSubstitutions[wTargetConceptChordDegree].size())
+        {
+            oProgression[wProgIndex] =                                                                  // assign new degree value at index...
+                    Substitutions::genericSubstitutions[wTargetConceptChordDegree]                      // ...in this degree's possible substitutions
+                    [randVectorIndex(Substitutions::genericSubstitutions[wTargetConceptChordDegree])];  // ...a random possibile substitute
+            return VARIATION_SUCCESS;
+        }
+        else
+        {
+            removeEraseValue(wRemainingChords,wProgIndex);
+        }
+    }
+    return VARIATION_FAILURE;
+}
+
+//  Interpolate
+int hsuGenericVariation_Interpolation(Progression& oProgression)
+{
+    vector<int> wRemainingChords;
+    for(int i = 0; i < oProgression.size(); ++i)
+    {
+        wRemainingChords.push_back(i);
+    }
+
+    int wProgIndex;
+
+    for(int i = 0; i < oProgression.size(); ++i)
+    {
+        wProgIndex = randVectorIndex(wRemainingChords);
+        int wTargetConceptChordDegree = oProgression[wProgIndex].mDegree;
+
+        // If the targeted degree has available interpolations
+        if(Substitutions::genericInterpolations[wTargetConceptChordDegree].size())
+        {
+            oProgression.insert(oProgression.begin() + wProgIndex,                                      // insert new concept chord at index...
+                    Substitutions::genericInterpolations[wTargetConceptChordDegree]                     // ...in this degree's possible interpolations
+                    [randVectorIndex(Substitutions::genericInterpolations[wTargetConceptChordDegree])]);  // ...a random possibile interpolated chord
+
+            return VARIATION_SUCCESS;
+        }
+        else
+        {
+            removeEraseValue(wRemainingChords,wProgIndex);
+        }
+    }
+    return VARIATION_FAILURE;
+}
+
+// HSU variations functions list
+vector<VARIATION_FUNCTION_POINTER> hsuGenericVariationFunctions =
+{
+      hsuGenericVariation_Substitution,
+      hsuGenericVariation_Interpolation
+};
+
+
+//
+// This function will randomly attempt the available hsu variations
+//
+bool variation(Progression& oProgression, int iVariationAmount, vector<VARIATION_FUNCTION_POINTER> iVariationFunctions)
+{
     for(int wPass = 0; wPass < iVariationAmount; ++wPass)
     {
-        vector<int> wAvailableVariations;
+        vector<int> wRemainingVariations;
 
         // Create a vector containing a  continous list of int (0,1,2,3...) for all the variationFunctions
         // vector possible indexes. Each attempted index will be removed from the vector, so it is not attempted
         // more than once.
-        for(int i = 0; i < hsuVariationFunctions.size(); ++i) wAvailableVariations.push_back(i);
+        for(int i = 0; i < iVariationFunctions.size(); ++i)
+        {
+            wRemainingVariations.push_back(i);
+        }
 
-        wAttemptSuccessful = false;
         int wCase;
-        while(!wAttemptSuccessful)
+        for(int i = 0; i < iVariationFunctions.size(); ++i)
         {
             // among the 3 possibilities, if one fails for incompatibility,
             // remove it from switch case possible inputs
-            wCase = randVectorIndex(wAvailableVariations);
+            wCase = randVectorIndex(wRemainingVariations);
 
-            if(hsuVariationFunctions[wCase](oProgression))
+            if(iVariationFunctions[wCase](oProgression))
             {
-                wAttemptSuccessful = true;
+                return true;
             }
             else
             {
-                wAttemptSuccessful = false;
-                removeEraseValue(wAvailableVariations,wCase);
-                /*
-                wAvailableVariations.erase(std::remove(wAvailableVariations.begin(),
-                                                       wAvailableVariations.end(),
-                                                       wCase), wAvailableVariations.end());*/
+                removeEraseValue(wRemainingVariations,wCase);
             }
         }
     }
-}
-
-
-
-//
-// GENERIC SUBSTITUTIONS
-//
-void hsuGenericSubstitutions(Progression& progression, int maxSubstitutionsCount, int maxInterpolationCount)
-{
-    int substitutionCount = 0;
-    int interpolationCount = 0;
-
-    for (unsigned int i = 0; i < progression.size(); ++i)
-    {
-
-        // Attempt substitution
-
-        vector<ConceptChord> wSubstitution	= Substitutions::genericSubstitutions[progression[i].mDegree];
-
-        if (wSubstitution.size() >= 1)
-        {
-            if ( Probability(probGenericSubstitutions) && substitutionCount < maxSubstitutionsCount)
-            {
-                progression[i] = wSubstitution[randomInt(0, wSubstitution.size() - 1)];
-                ++substitutionCount;
-            }
-        }
-
-
-        // Attempt interpolation
-
-        vector<ConceptChord> wInterpolation = Substitutions::genericInterpolations[progression[i].mDegree];
-
-        if (wInterpolation.size() >= 1)
-        {
-            if ( Probability(probGenericSubstitutions) && interpolationCount < maxInterpolationCount)
-            {
-                progression.insert(progression.begin() + i,wInterpolation[ randomInt(0, wInterpolation.size()-1)]);
-                ++interpolationCount;
-            }
-        }
-    }
+    return false;
 }
 
 

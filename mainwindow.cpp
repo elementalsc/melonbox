@@ -35,13 +35,13 @@ void RootWindow::on_pushButton_clicked()
 
     int rInt = randomInt(0, 5);
     prog = hsuList[rInt];
-    hsuVariation(prog,1);
-    /*hsuGenericSubstitutions(prog, 2,2);
-    applyModeTriads(prog, mode);
+    variation(prog,1,hsuBasicVariationFunctions);
+    variation(prog,1,hsuGenericVariationFunctions);
+
+    /*applyModeTriads(prog, mode);
     addSecondaryDominant(prog, 2);
     modalMixture(prog,mode, 2);*/
 
-    //ui->oProgDisplay->append(QString::number(randomInt(0, 10)));
     ui->oProgDisplay->append(QString::fromStdString(ProgToString(prog)));
 }
 

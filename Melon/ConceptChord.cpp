@@ -119,7 +119,7 @@ struct ConceptChord
             oString.append("+");
             break;
         case DiminishedTriad:
-            oString.append("�");
+            oString.append("°");
             break;
         default: break;
         }

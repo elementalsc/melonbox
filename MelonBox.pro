@@ -31,11 +31,11 @@ SOURCES += \
 
 HEADERS += \
         mainwindow.h \
-    Melon/harmony.h \
     Melon/MelonUtil.h \
     Melon/Substitutions.h \
     Melon/Modes.h \
-    Melon/Chords.h
+    Melon/Chords.h \
+    Melon/Harmony.h
 
 FORMS += \
         mainwindow.ui

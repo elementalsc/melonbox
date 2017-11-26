@@ -18,11 +18,6 @@ int randomInt(int min, int max)
     return min + (rand() % static_cast<int>(max - min + 1));
 }
 
-bool YesOrNo()
-{
-    return static_cast<bool>(randomInt(0, 1));
-}
-
 int probHsuVariation = 0;
 int probGenericSubstitutions = 0;
 int probSecondaryDominant = 0;
@@ -30,7 +25,7 @@ int probModalMixture = 0;
 
 bool Probability(int percentageOfSuccess)
 {
-    return percentageOfSuccess > randomInt(0, 99);
+    return percentageOfSuccess >= randomInt(1, 100);
 }
 
 template <class T>

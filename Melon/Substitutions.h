@@ -1,7 +1,6 @@
 #pragma once
 
-#include "MelonUtil.h"
-#include "Chords.h"
+
 #include "ConceptChord.cpp"
 
 namespace Substitutions
@@ -95,17 +94,11 @@ namespace Substitutions
 
     vector<vector<vector<ConceptChord>>> modalSubstitutions =
     {
-
-        // substitutions de modes majeurs
-
-        // substitution de modes mineurs
-
-
         // index 0 empty for readability
         {},
 
         //
-        // Ionian mode substitutions
+        // Major modes substitutions
         //
         {
             // index 0 empty for readability
@@ -148,7 +141,7 @@ namespace Substitutions
         },
 
         //
-        // Dorian mode substitutions
+        // Minor modes substitutions
         //
         {
             // index 0 empty for readability
@@ -182,185 +175,5 @@ namespace Substitutions
             {
             }
         },
-
-        //
-        // Phrygian mode substitutions
-        //
-        {
-            // index 0 empty for readability
-            {},
-
-            // 1st degree :
-            {
-            },
-
-            // 2nd degree :
-            {
-            },
-
-            // 3rd degree :
-            {
-            },
-
-            // 4th degree :
-            {
-            },
-
-            // 5th degree :
-            {
-            },
-
-            // 6th degree :
-            {
-            },
-
-            // 7th degree :
-            {
-            }
-        },
-
-        //
-        // Lydian mode substitutions
-        //
-        {
-            // index 0 empty for readability
-            {},
-
-            // 1st degree :
-            {
-            },
-
-            // 2nd degree :
-            {
-            },
-
-            // 3rd degree :
-            {
-            },
-
-            // 4th degree :
-            {
-            },
-
-            // 5th degree :
-            {
-            },
-
-            // 6th degree :
-            {
-            },
-
-            // 7th degree :
-            {
-            }
-        },
-
-        //
-        // Mixolydian mode substitutions
-        //
-        {
-            // index 0 empty for readability
-            {},
-
-            // 1st degree :
-            {
-            },
-
-            // 2nd degree :
-            {
-            },
-
-            // 3rd degree :
-            {
-            },
-
-            // 4th degree :
-            {
-            },
-
-            // 5th degree :
-            {
-            },
-
-            // 6th degree :
-            {
-            },
-
-            // 7th degree :
-            {
-            }
-        },
-
-        //
-        // Aeolian mode substitutions
-        //
-        {
-            // index 0 empty for readability
-            {},
-
-            // 1st degree :
-            {
-            },
-
-            // 2nd degree :
-            {
-            },
-
-            // 3rd degree :
-            {
-            },
-
-            // 4th degree :
-            {
-            },
-
-            // 5th degree :
-            {
-            },
-
-            // 6th degree :
-            {
-            },
-
-            // 7th degree :
-            {
-            }
-        },
-
-        //
-        // Locrian mode substitutions
-        //
-        {
-            // index 0 empty for readability
-            {},
-
-            // 1st degree :
-            {
-            },
-
-            // 2nd degree :
-            {
-            },
-
-            // 3rd degree :
-            {
-            },
-
-            // 4th degree :
-            {
-            },
-
-            // 5th degree :
-            {
-            },
-
-            // 6th degree :
-            {
-            },
-
-            // 7th degree :
-            {
-            }
-        }
     };
 }
