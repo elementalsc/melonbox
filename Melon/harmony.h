@@ -1,23 +1,13 @@
-#include <iostream>
-#include <vector>
-#include <string>
+#pragma once
 #include "MelonUtil.h"
 #include "Modes.h"
 #include "Substitutions.h"
 #include "ConceptChord.cpp"
 
-using namespace std;
 typedef vector<ConceptChord> Progression;
 
-int probHsuVariation = 0;
-int probGenericSubstitutions = 0;
-int probSecondaryDominant = 0;
-int probModalMixture = 0;
-
-bool Probability(int percentageOfSuccess)
-{
-    return percentageOfSuccess > randomInt(1, 99);
-}
+#define melonException int
+#define VARIATION_FUNCTION_POINTER melonException (*)(Progression&)
 
 vector<Progression> hsuList =
 {
@@ -66,6 +56,10 @@ vector<Progression> hsuList =
     }
 };
 
+//
+// BASINC HARMONIC STRUCTURAL UNIT VARIATIONS
+//
+
 // Add tonic in front of the progression
 int hsuVariation1(Progression& oProgression)
 {
@@ -113,9 +107,6 @@ int hsuVariation3(Progression& oProgression)
       return 0;
 }
 
-#define melonException int
-#define VARIATION_FUNCTION_POINTER melonException (*)(Progression&)
-
 // HSU variations functions list
 vector<VARIATION_FUNCTION_POINTER> hsuVariationFunctions =
 {
@@ -124,17 +115,7 @@ vector<VARIATION_FUNCTION_POINTER> hsuVariationFunctions =
       hsuVariation3
 };
 
-template <class T>
-int randVectorIndex(vector<T>& iVector)
-{
-      return randomInt(0,iVector.size()-1);
-}
 
-template <class T, class V>
-void removeEraseValue(vector<T>& oVector, V& valueToRemove)
-{
-    oVector.erase(std::remove(oVector.begin(),oVector.end(),valueToRemove),oVector.end());
-}
 
 //
 // VARIATIONS ON HARMONIC STRUCTURAL UNITS
@@ -178,63 +159,6 @@ void hsuVariation(Progression& oProgression, int iVariationAmount)
     }
 }
 
-
-/*
-//
-// VARIATIONS ON HARMONIC STRUCTURAL UNITS
-//
-void hsuVariation(Progression& progression)
-{
-    int wProgSize = progression.size();
-    int temp;
-
-    switch(temp)
-    {
-    case 1:
-    {
-        ( Probability(probHsuVariation) ); // Add tonic in front of the progression
-        if (progression[0] != ConceptChord(1))
-        {
-            progression.insert(progression.begin(), ConceptChord(1));
-        }
-    }
-
-    case 2:
-    {
-        (Probability(probHsuVariation)); // Substitute V-I resolution for V-(IV|VI)
-
-        if ( progression[wProgSize - 1] == ConceptChord(1) &&
-                progression[wProgSize - 1] == ConceptChord(5) )
-        {
-            if ( YesOrNo() )
-            {
-                progression[wProgSize - 1] = ConceptChord(4);
-            }
-            else
-            {
-                progression[wProgSize - 1] = ConceptChord(6);
-            }
-        }
-    }
-
-    case 3:  // Stop progression after V
-    {
-        ( Probability(probHsuVariation) );
-
-        // start iteration at 1 to avoid progression with a single chord
-        for (unsigned int i = 1; i < wProgSize; ++i)
-        {
-            if (progression[i] == ConceptChord(5))
-            {
-                progression.erase(progression.begin() + (++i), progression.end());
-
-                wProgSize = progression.size();
-            }
-        }
-    }
-    }
-}
-*/
 
 
 //

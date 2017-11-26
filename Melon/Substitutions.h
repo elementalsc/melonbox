@@ -1,11 +1,8 @@
 #pragma once
 
-#include <vector>
+#include "MelonUtil.h"
 #include "Chords.h"
 #include "ConceptChord.cpp"
-
-using namespace std;
-
 
 namespace Substitutions
 {

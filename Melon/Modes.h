@@ -1,10 +1,8 @@
 #pragma once
-#include <vector>
-#include <string>
+#include "MelonUtil.h"
 #include "Chords.h"
 #include "ConceptChord.cpp"
 
-using namespace std;
 typedef vector<int> NoteVector;
 
 

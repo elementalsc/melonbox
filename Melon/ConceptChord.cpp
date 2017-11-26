@@ -1,7 +1,5 @@
 #pragma once
-#include <vector>
-#include <string>
-#include <algorithm>
+#include "MelonUtil.h"
 #include "Chords.h"
 
 using namespace std;

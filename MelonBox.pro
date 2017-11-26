@@ -27,15 +27,15 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-    Melon/conceptchord.cpp \
+    Melon/ConceptChord.cpp
 
 HEADERS += \
         mainwindow.h \
-    Melon/chords.h \
     Melon/harmony.h \
     Melon/MelonUtil.h \
-    Melon/modes.h \
-    Melon/substitutions.h \
+    Melon/Substitutions.h \
+    Melon/Modes.h \
+    Melon/Chords.h
 
 FORMS += \
         mainwindow.ui
