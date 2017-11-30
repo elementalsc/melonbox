@@ -9,6 +9,10 @@ namespace Substitutions
     {
         {},	// index 0 empty for readability
 
+
+        // COMPLETE ACCORDING TO CIRCLE OF 5THs
+
+
             // 1st degree
         {
             ConceptChord(1, Inversion::Six),

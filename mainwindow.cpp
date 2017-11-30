@@ -35,8 +35,7 @@ void RootWindow::on_pushButton_clicked()
 
     int rInt = randomInt(0, 5);
     prog = hsuList[rInt];
-    variation(prog,1,hsuBasicVariationFunctions);
-    variation(prog,1,hsuGenericVariationFunctions);
+    applyVariation(prog,1,hsuBasicVariationFunctions);
 
     /*applyModeTriads(prog, mode);
     addSecondaryDominant(prog, 2);
