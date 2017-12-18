@@ -2,118 +2,251 @@
 <ui version="4.0">
  <class>RootWindow</class>
  <widget class="QMainWindow" name="RootWindow">
+  <property name="enabled">
+   <bool>true</bool>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>504</width>
-    <height>263</height>
+    <width>450</width>
+    <height>250</height>
    </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>450</width>
+    <height>250</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>450</width>
+    <height>250</height>
+   </size>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
+  <property name="autoFillBackground">
+   <bool>false</bool>
+  </property>
+  <property name="dockOptions">
+   <set>QMainWindow::AllowTabbedDocks|QMainWindow::AnimatedDocks</set>
+  </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QPushButton" name="pushButton">
+   <widget class="QListWidget" name="uScaleList">
     <property name="geometry">
      <rect>
-      <x>220</x>
+      <x>290</x>
       <y>10</y>
-      <width>80</width>
-      <height>21</height>
+      <width>71</width>
+      <height>191</height>
      </rect>
     </property>
-    <property name="text">
-     <string>Generate!</string>
+    <item>
+     <property name="text">
+      <string>C</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>C#/Db</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>D</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>D#/Eb</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>E</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>F</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>F#/Gb</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>G</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>G#/Ab</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>A</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>A#/Bb</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>B</string>
+     </property>
+    </item>
+   </widget>
+   <widget class="QListWidget" name="uMode">
+    <property name="geometry">
+     <rect>
+      <x>370</x>
+      <y>10</y>
+      <width>71</width>
+      <height>191</height>
+     </rect>
     </property>
+    <item>
+     <property name="text">
+      <string>Ionian</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Dorian</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Phrygian</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Lydian</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Mixolydian</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Aeolien</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Locrien</string>
+     </property>
+    </item>
    </widget>
    <widget class="QTextBrowser" name="oProgDisplay">
     <property name="geometry">
      <rect>
-      <x>120</x>
-      <y>40</y>
-      <width>271</width>
-      <height>101</height>
+      <x>10</x>
+      <y>10</y>
+      <width>151</width>
+      <height>191</height>
      </rect>
     </property>
    </widget>
-   <widget class="QDial" name="dialHsuVariation">
+   <widget class="QWidget" name="">
     <property name="geometry">
      <rect>
-      <x>120</x>
-      <y>140</y>
-      <width>50</width>
-      <height>64</height>
+      <x>170</x>
+      <y>10</y>
+      <width>113</width>
+      <height>54</height>
      </rect>
     </property>
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <widget class="QPushButton" name="pushButton">
+       <property name="text">
+        <string>Generate!</string>
+       </property>
+       <property name="shortcut">
+        <string>Enter</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>Variations</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QSpinBox" name="variationNumber"/>
+       </item>
+      </layout>
+     </item>
+    </layout>
    </widget>
-   <widget class="QDial" name="dialGenericSubstitution">
-    <property name="geometry">
-     <rect>
-      <x>190</x>
-      <y>140</y>
-      <width>50</width>
-      <height>64</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QDial" name="dialSecondaryDominant">
-    <property name="geometry">
-     <rect>
-      <x>260</x>
-      <y>140</y>
-      <width>50</width>
-      <height>64</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QDial" name="dialModalMixture">
-    <property name="geometry">
-     <rect>
-      <x>330</x>
-      <y>140</y>
-      <width>50</width>
-      <height>64</height>
-     </rect>
-    </property>
-    <property name="mouseTracking">
-     <bool>false</bool>
-    </property>
-    <property name="tracking">
-     <bool>false</bool>
-    </property>
-    <property name="orientation">
-     <enum>Qt::Vertical</enum>
-    </property>
-    <property name="wrapping">
-     <bool>false</bool>
-    </property>
-    <property name="notchesVisible">
-     <bool>false</bool>
-    </property>
-   </widget>
+   <zorder>pushButton</zorder>
+   <zorder>verticalLayoutWidget</zorder>
+   <zorder></zorder>
+   <zorder>Button</zorder>
+   <zorder>radioButton_2</zorder>
+   <zorder>uScaleList</zorder>
+   <zorder>uMode</zorder>
+   <zorder>label</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>504</width>
+     <width>450</width>
      <height>20</height>
     </rect>
    </property>
-  </widget>
-  <widget class="QToolBar" name="mainToolBar">
-   <attribute name="toolBarArea">
-    <enum>TopToolBarArea</enum>
-   </attribute>
-   <attribute name="toolBarBreak">
-    <bool>false</bool>
-   </attribute>
+   <widget class="QMenu" name="menuMelonBox">
+    <property name="title">
+     <string>MelonBox</string>
+    </property>
+    <addaction name="actionQuit"/>
+   </widget>
+   <addaction name="menuMelonBox"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
+  <action name="actionQuit">
+   <property name="text">
+    <string>Quit</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>actionQuit</sender>
+   <signal>triggered()</signal>
+   <receiver>RootWindow</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>224</x>
+     <y>124</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

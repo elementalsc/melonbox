@@ -1,7 +1,8 @@
-#pragma once
+#ifndef SUBSTITUTIONS_H
+#define SUBSTITUTIONS_H
 
-
-#include "ConceptChord.cpp"
+#include "ConceptChord.h"
+using namespace std;
 
 namespace Substitutions
 {
@@ -181,3 +182,5 @@ namespace Substitutions
         },
     };
 }
+
+#endif // SUBSTITUTIONS_H

@@ -1,4 +1,6 @@
-#pragma once
+#ifndef MELONUTIL_H
+#define MELONUTIL_H
+
 #include <random>
 #include <iostream>
 #include <vector>
@@ -8,25 +10,9 @@
 
 using namespace std;
 
-int randomInt(int min, int max)
-{
-    /*std::random_device rd;
-    std::mt19937 rng(rd());
-    std::uniform_int_distribution<int> uni(min, max);
+int randomInt(int min, int max);
 
-    return uni(rng);*/
-    return min + (rand() % static_cast<int>(max - min + 1));
-}
-
-int probHsuVariation = 0;
-int probGenericSubstitutions = 0;
-int probSecondaryDominant = 0;
-int probModalMixture = 0;
-
-bool Probability(int percentageOfSuccess)
-{
-    return percentageOfSuccess >= randomInt(1, 100);
-}
+bool Probability(int percentageOfSuccess);
 
 template <class T>
 int randVectorIndex(vector<T>& iVector)
@@ -39,3 +25,26 @@ void removeEraseValue(vector<T>& oVector, V& valueToRemove)
 {
     oVector.erase(std::remove(oVector.begin(),oVector.end(),valueToRemove),oVector.end());
 }
+
+template <class T>
+void insertAtIndex(vector<T>& oVector, int iIndex, T insertedValue)
+{
+    oVector.insert(oVector.begin() + iIndex, insertedValue);
+}
+
+template <class T>
+vector<int> generateListOfIndex(vector<T>& iVector)
+{
+    vector<int> wReturnedVector;
+
+    for(int i = 0; i < iVector.size(); ++i)
+    {
+        wReturnedVector.push_back(i);
+    }
+
+    return wReturnedVector;
+}
+
+
+
+#endif // MELONUTIL_H

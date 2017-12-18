@@ -1,215 +1,95 @@
-#pragma once
+#ifndef CONCEPTCHORD_CPP
+#define CONCEPTCHORD_CPP
+
 #include "MelonUtil.h"
 #include "Chords.h"
+#include "ConceptChord.h"
 
 using namespace std;
 
-struct ConceptChord
+
+string
+ConceptChord::toString()
 {
-
-    int mDegree;
-    Triad			mTriad				= NoDefinedTriad;
-    Inversion		mInversion			= Root;
-    Alteration		mAlteration			= NoAlteration;
-    SuspendedDegree mSuspendedDegree	= NoSuspendedDegree;
-    AddedDegree		mAddedDegree		= NoAddedDegree;
-    SecondaryDegree mSecondaryDegree	= NoSecondaryDegree;
-
-    virtual ~ConceptChord() = default;
+    string oString;
 
 
-    //
-    // CONSTRUCTORS
-    //
-
-    ConceptChord() {}
-
-    ConceptChord(int degree) :
-        mDegree(degree)
-    {}
-
-    ConceptChord(int degree, Triad triad) :
-        mDegree(degree),
-        mTriad(triad)
-    {}
-
-    ConceptChord(int degree, Inversion inversion) :
-        mDegree(degree),
-        mInversion(inversion)
-    {}
-
-    ConceptChord(int degree, Triad triad, Alteration alteration) :
-        mDegree(degree),
-        mTriad(triad),
-        mAlteration(alteration)
-    {}
-
-    ConceptChord(int degree, Triad triad, Inversion inversion) :
-        mDegree(degree),
-        mTriad(triad),
-        mInversion(inversion)
-    {}
-
-    ConceptChord(int degree, Triad triad, Inversion inversion, Alteration alteration) :
-        mDegree(degree),
-        mTriad(triad),
-        mInversion(inversion),
-        mAlteration(alteration)
-    {}
-
-    //
-    //	FLUENT SETTERS
-    //
-
-    ConceptChord& Triad(Triad triad)
+    switch (mDegree)
     {
-        mTriad = triad;
-        return *this;
+    case 1: (mTriad == MinorTriad || mTriad == DiminishedTriad) ? oString.append("i")   : oString.append("I");	break;
+    case 2: (mTriad == MinorTriad || mTriad == DiminishedTriad) ? oString.append("ii")  : oString.append("II");	break;
+    case 3: (mTriad == MinorTriad || mTriad == DiminishedTriad) ? oString.append("iii") : oString.append("III");	break;
+    case 4: (mTriad == MinorTriad || mTriad == DiminishedTriad) ? oString.append("iv")  : oString.append("IV");	break;
+    case 5: (mTriad == MinorTriad || mTriad == DiminishedTriad) ? oString.append("v")   : oString.append("V");	break;
+    case 6: (mTriad == MinorTriad || mTriad == DiminishedTriad) ? oString.append("vi")  : oString.append("VI");	break;
+    case 7: (mTriad == MinorTriad || mTriad == DiminishedTriad) ? oString.append("vii") : oString.append("VII");	break;
+    default: break;
     }
 
-    ConceptChord& Inversion(Inversion inversion)
+    switch (mTriad)
     {
-        mInversion = inversion;
-        return *this;
+    case AugmentedTriad:
+        oString.append("+");
+        break;
+    case DiminishedTriad:
+        oString.append("°");
+        break;
+    default: break;
     }
 
-    ConceptChord& Alteration(Alteration alteration)
+    switch (mAlteration)
     {
-        mAlteration = alteration;
-        return *this;
+    case Flat:
+        oString.append("b");
+        break;
+    case Sharp:
+        oString.append("#");
+        break;
+    default: break;
     }
 
-    ConceptChord& AddedDegree(AddedDegree addedDegree)
+    switch (mSuspendedDegree)
     {
-        mAddedDegree = addedDegree;
-        return *this;
+    default: break;
     }
 
-    ConceptChord& SuspendedDegree(SuspendedDegree suspendedDegree)
+    switch (mAddedDegree)
     {
-        mSuspendedDegree = suspendedDegree;
-        return *this;
-    }
-    ConceptChord& SecondaryDegree(SecondaryDegree secondaryDegree)
-    {
-        mSecondaryDegree = secondaryDegree;
-        return *this;
+    default: break;
     }
 
-    string toString()
+    switch (mInversion)
     {
-        string oString;
+        //
+        // TODO: Consider 7th chords
+        //
+    case First :
+        oString.append("6");
+        break;
 
+    case Second :
 
-        switch (mDegree)
-        {
-        case 1: (mTriad == MinorTriad || mTriad == DiminishedTriad) ? oString.append("i")   : oString.append("I");		break;
-        case 2: (mTriad == MinorTriad || mTriad == DiminishedTriad) ? oString.append("ii")	: oString.append("II");		break;
-        case 3: (mTriad == MinorTriad || mTriad == DiminishedTriad) ? oString.append("iii")	: oString.append("III");	break;
-        case 4: (mTriad == MinorTriad || mTriad == DiminishedTriad) ? oString.append("iv")	: oString.append("IV");		break;
-        case 5: (mTriad == MinorTriad || mTriad == DiminishedTriad) ? oString.append("v")   : oString.append("V");		break;
-        case 6: (mTriad == MinorTriad || mTriad == DiminishedTriad) ? oString.append("vi")	: oString.append("VI");		break;
-        case 7: (mTriad == MinorTriad || mTriad == DiminishedTriad) ? oString.append("vii")	: oString.append("VII");	break;
-        default: break;
-        }
+        oString.append("64");
+        break;
 
-        switch (mTriad)
-        {
-        case AugmentedTriad:
-            oString.append("+");
-            break;
-        case DiminishedTriad:
-            oString.append("°");
-            break;
-        default: break;
-        }
+    case Third:
+        oString.append("");
+        break;
 
-        switch (mAlteration)
-        {
-        case Flat:
-            oString.append("b");
-            break;
-        case Sharp:
-            oString.append("#");
-            break;
-        default: break;
-        }
-
-        switch (mSuspendedDegree)
-        {
-        default: break;
-        }
-
-        switch (mAddedDegree)
-        {
-        default: break;
-        }
-
-        switch (mInversion)
-        {
-            //
-            // TODO: Consider 7th chords
-            //
-        case First :
-            oString.append("6");
-            break;
-
-        case Second :
-
-            oString.append("64");
-            break;
-
-        case Third:
-            oString.append("");
-            break;
-
-        default: break;
-        }
-
-        switch (mSecondaryDegree)
-        {
-        case IV:	oString.insert(0, "IV/"); break;
-        case V:     oString.insert(0, "V/"); break;
-        case VII:	oString.insert(0, "VII/"); break;
-        default: break;
-        }
-
-        return oString;
+    default: break;
     }
 
-    //
-    //	OPERATORS
-    //
-
-    bool operator==(const ConceptChord& other) const
+    switch (mSecondaryDegree)
     {
-        if (
-            mDegree				== other.mDegree &&
-            mTriad				== other.mTriad &&
-            mInversion			== other.mInversion &&
-            mAlteration			== other.mAlteration &&
-            mSuspendedDegree	== other.mSuspendedDegree &&
-            mAddedDegree		== other.mAddedDegree &&
-            mSecondaryDegree	== other.mSecondaryDegree
-           )
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+    case IV:    oString.insert(0, "IV/"); break;
+    case V:     oString.insert(0, "V/"); break;
+    case VII:   oString.insert(0, "VII/"); break;
+    default: break;
     }
 
-    bool operator!=(const ConceptChord& other) const
-    {
-        if (!(*this == other))
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-};
+    return oString;
+}
+
+
+
+#endif // CONCEPTCHORD_CPP

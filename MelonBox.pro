@@ -27,17 +27,23 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-    Melon/ConceptChord.cpp
+        Melon/ConceptChord.cpp \
+        Melon/Chord.cpp \
+    Melon/Modes.cpp \
+    Melon/MelonUtil.cpp
 
 HEADERS += \
         mainwindow.h \
-    Melon/MelonUtil.h \
-    Melon/Substitutions.h \
-    Melon/Modes.h \
-    Melon/Chords.h \
-    Melon/Harmony.h
+        Melon/MelonUtil.h \
+        Melon/Substitutions.h \
+        Melon/Modes.h \
+        Melon/Harmony.h \
+        Melon/Chord.h \
+        Melon/ConceptChord.h
 
 FORMS += \
         mainwindow.ui
 
 DISTFILES += \
+
+QMAKE_CXXFLAGS += -Wsign-compare\
