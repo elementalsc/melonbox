@@ -10,19 +10,19 @@
     <x>0</x>
     <y>0</y>
     <width>450</width>
-    <height>250</height>
+    <height>270</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
     <width>450</width>
-    <height>250</height>
+    <height>270</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
     <width>450</width>
-    <height>250</height>
+    <height>270</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -41,7 +41,7 @@
       <x>290</x>
       <y>10</y>
       <width>71</width>
-      <height>191</height>
+      <height>211</height>
      </rect>
     </property>
     <item>
@@ -111,7 +111,7 @@
       <x>370</x>
       <y>10</y>
       <width>71</width>
-      <height>191</height>
+      <height>131</height>
      </rect>
     </property>
     <item>
@@ -160,7 +160,7 @@
      </rect>
     </property>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>170</x>
@@ -196,14 +196,10 @@
      </item>
     </layout>
    </widget>
-   <zorder>pushButton</zorder>
-   <zorder>verticalLayoutWidget</zorder>
-   <zorder></zorder>
-   <zorder>Button</zorder>
-   <zorder>radioButton_2</zorder>
+   <zorder>oProgDisplay</zorder>
+   <zorder>layoutWidget</zorder>
    <zorder>uScaleList</zorder>
    <zorder>uMode</zorder>
-   <zorder>label</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
@@ -211,7 +207,7 @@
      <x>0</x>
      <y>0</y>
      <width>450</width>
-     <height>20</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuMelonBox">

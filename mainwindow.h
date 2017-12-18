@@ -2,6 +2,7 @@
 #define ROOTWINDOW_H
 
 #include <QMainWindow>
+#include "Melon/MelonLogger.h"
 
 namespace Ui {
 class RootWindow;
@@ -13,6 +14,7 @@ class RootWindow : public QMainWindow
 
 public:
     explicit RootWindow(QWidget *parent = 0);
+    MelonLogger* logger;
     ~RootWindow();
 
 private slots:

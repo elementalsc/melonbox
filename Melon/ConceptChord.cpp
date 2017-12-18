@@ -2,7 +2,6 @@
 #define CONCEPTCHORD_CPP
 
 #include "MelonUtil.h"
-#include "Chords.h"
 #include "ConceptChord.h"
 
 using namespace std;

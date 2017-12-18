@@ -3,7 +3,7 @@
 
 #include <vector>
 #include <iostream>
-#include "Chord.h"
+#include "ConceptChord.h"
 
 typedef std::vector<int> NoteVector;
 
@@ -67,5 +67,10 @@ static const NoteVector locrianPosition		= { NULL,0,1,3,5,6,8,10 };
 
 
 int Position(Mode mode, int degree);
+
+//
+//	INSERTING MODE CHORDS
+//
+void applyModeTriads(std::vector<ConceptChord>& oProgression, Mode iMode, bool iNaturalOrHarmonic = true);
 
 #endif // MODES_H

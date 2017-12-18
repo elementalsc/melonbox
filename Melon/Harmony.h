@@ -302,16 +302,7 @@ string ProgToString(ProgressionType& oProgression)
 
 
 
-//
-//	INSERTING MODE CHORDS
-//
-void applyModeTriads(vector<ConceptChord>& oProgression, Mode iMode, bool iNaturalOrHarmonic = true)
-{
-    for(int i = 0; i < oProgression.size(); ++i)
-    {
-        oProgression[i].mTriad = mNaturalTriads[((oProgression[i].mDegree - 1) + (iMode - 1)) % 7];
-    }
-}
+
 
 
 //====================================================================================================================

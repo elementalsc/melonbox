@@ -28,9 +28,9 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
         Melon/ConceptChord.cpp \
-        Melon/Chord.cpp \
-    Melon/Modes.cpp \
-    Melon/MelonUtil.cpp
+        Melon/Modes.cpp \
+        Melon/MelonUtil.cpp \
+        Melon/MelonLogger.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -38,8 +38,8 @@ HEADERS += \
         Melon/Substitutions.h \
         Melon/Modes.h \
         Melon/Harmony.h \
-        Melon/Chord.h \
-        Melon/ConceptChord.h
+        Melon/ConceptChord.h \
+        Melon/MelonLogger.h
 
 FORMS += \
         mainwindow.ui

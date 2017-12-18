@@ -66,3 +66,14 @@ int Position(Mode mode, int degree)
     default: return -1;
     }
 }
+
+//
+//	INSERTING MODE CHORDS
+//
+void applyModeTriads(std::vector<ConceptChord>& oProgression, Mode iMode, bool iNaturalOrHarmonic)
+{
+    for(int i = 0; i < oProgression.size(); ++i)
+    {
+        oProgression[i].mTriad = mNaturalTriads[((oProgression[i].mDegree - 1) + (iMode - 1)) % 7];
+    }
+}

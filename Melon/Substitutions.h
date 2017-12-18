@@ -97,6 +97,10 @@ namespace Substitutions
         }
     };
 
+    // créer un algorithme qui donne des accords de substitution selon la gamme et le mode utiliser
+    // utiliser des critères comme...
+    //      "pas plus d'une ou deux notes hors gamme"
+    //      "interdiction de modifier tonique ou dominante"
     vector<vector<vector<ConceptChord>>> modalSubstitutions =
     {
         // index 0 empty for readability
