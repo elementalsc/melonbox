@@ -3,6 +3,7 @@
 #include "ui_mainwindow.h"
 
 #include "Melon/Harmony.h"
+#include "Melon/Progression.h"
 
 using namespace std;
 

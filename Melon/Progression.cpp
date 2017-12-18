@@ -2,12 +2,9 @@
 
 Progression::Progression(){}
 
-Progression::Progression(Chord iChords...)
+Progression::Progression(std::vector<Chord> iChords)
 {
-    for(auto chord : iChords)
-    {
-        mChords.push_back(chord);
-    }
+    mChords = iChords;
 }
 
 Chord& Progression::operator[](int iIndex)
@@ -28,11 +25,6 @@ void Progression::removeChord(int wIndex)
 void Progression::insertChord(Chord iChord, int wIndex)
 {
     mChords.insert(mChords.begin() + wIndex, iChord);
-}
-
-Progression& Progression::append(Chord& iChord)
-{
-
 }
 
 std::string Progression::toString()

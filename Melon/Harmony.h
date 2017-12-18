@@ -20,49 +20,24 @@ vector<Progression> hsuList =
 {
     // Basic Harmonic Strucutal Unit
 
-    progression_V_I
-    /*
     // V-I
-    {
-        Chord(5),
-        Chord(1)
-    },
+    Progression({Chord(5), Chord(1)}),
 
     // IV-I
-    {
-        Chord(4),
-        Chord(1)
-    },
+    Progression({Chord(4), Chord(1)}),
 
     // II-V-I
-    {
-        Chord(2),
-        Chord(5),
-        Chord(1)
-    },
+    Progression({Chord(2), Chord(5), Chord(1)}),
 
     // VI-V-I
-    {
-        Chord(6),
-        Chord(5),
-        Chord(1)
-    },
+    Progression({Chord(6), Chord(5), Chord(1)}),
 
     // VI-II-V-I
-    {
-        Chord(6),
-        Chord(2),
-        Chord(5),
-        Chord(1)
-    },
+    Progression({Chord(6), Chord(2), Chord(5), Chord(1)
+    }),
 
     // III-II-V-I
-    {
-        Chord(3),
-        Chord(2),
-        Chord(5),
-        Chord(1)
-    }*/
+    Progression({Chord(3), Chord(2), Chord(5), Chord(1)})
 };
 
 //=====================================================================================================================
@@ -140,7 +115,7 @@ int hsuGenericVariation_Substitution(Progression& oProgression)
         {
             oProgression[wProgIndex] =                                                           // Assign new degree value at index...
                     Substitutions::genericSubstitutions[wTargetChordDegree]                      // ...in this degree's possible substitutions
-                    [randVectorIndex(Substitutions::genericSubstitutions[wTargetChordDegree])];  // ...a random possibile substitute
+                    [randVectorIndex(Substitutions::genericSubstitutions[wTargetChordDegree].mChords)];  // ...a random possibile substitute
             return VARIATION_SUCCESS;
         }
         else
@@ -166,7 +141,7 @@ int hsuGenericVariation_Interpolation(Progression& oProgression)
         // If the targeted degree has available interpolations
         if(Substitutions::genericInterpolations[wTargetChordDegree].size())
         {
-            oProgression.insertChord(Substitutions::genericInterpolations[wTargetChordDegree][randVectorIndex(Substitutions::genericInterpolations[wTargetChordDegree])],wProgIndex);
+            oProgression.insertChord(Substitutions::genericInterpolations[wTargetChordDegree][randVectorIndex(Substitutions::genericInterpolations[wTargetChordDegree].mChords)],wProgIndex);
             /*
             insertAtIndex(oProgression, wProgIndex,                                      			// Insert new concept chord at index...
                           Substitutions::genericInterpolations[wTargetChordDegree]                       // ...in this degree's possible interpolations
@@ -182,19 +157,6 @@ int hsuGenericVariation_Interpolation(Progression& oProgression)
     }
 
     return VARIATION_FAILURE;
-}
-
-// Circle of fifths
-// Between two concept chords,
-int hsuGenericVariation_CircleOfFifthInsertion(Progression& oProgression)
-{
-    // select two consecutive chords
-
-    // compare if the correspond to a 3 chords sequence of the circle of 5th to insert a degree in between
-    Progression circleOfFifth = {Chord(1),Chord(4),Chord(7),Chord(3),Chord(6),Chord(2),Chord(5)};
-
-    //
-
 }
 
 //=====================================================================================================================
@@ -232,7 +194,7 @@ int hsuAlterativeVariation_AddSecondaryDominant(Progression& oProgression)
 // Substitute a chord with a chord from another mode
 int hsuAlterativeVariation_ModalMixture(Progression& oProgression)
 {
-/*
+
     std::vector<int> wRemainingChordIndexes = oProgression.indexList();
     int              wProgIndex;
 
@@ -254,7 +216,7 @@ int hsuAlterativeVariation_ModalMixture(Progression& oProgression)
             }
         }
     }
-*/
+
     return VARIATION_FAILURE;
 }
 
