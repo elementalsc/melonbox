@@ -1,7 +1,6 @@
 #ifndef CHORD_H
 #define CHORD_H
 
-
 #include <string>
 
 enum Note
@@ -246,7 +245,9 @@ public:
 //=====================================================================================================================
 
     std::string toString();
-};
+
+
+}; // class Chord
 
 
 #endif // CHORD_H

@@ -2,7 +2,9 @@
 
 MelonLogger* MelonLogger::mInstance = nullptr;
 
-MelonLogger* MelonLogger::getInstance()
+
+MelonLogger*
+MelonLogger::getInstance()
 {
     if(!mInstance)
     {
@@ -10,4 +12,18 @@ MelonLogger* MelonLogger::getInstance()
     }
 
     return mInstance;
+}
+
+MelonLogger::MelonLogger()
+{
+
+}
+
+
+MelonLogger::~MelonLogger()
+{
+    if(mInstance)
+    {
+        delete mInstance;
+    }
 }

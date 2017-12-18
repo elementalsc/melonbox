@@ -7,7 +7,8 @@ class MelonLogger
 private:
 
     static MelonLogger* mInstance;
-    MelonLogger(){};
+    MelonLogger();
+    ~MelonLogger();
 
 public:
 

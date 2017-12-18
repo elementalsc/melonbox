@@ -30,7 +30,9 @@ SOURCES += \
         Melon/Modes.cpp \
         Melon/MelonUtil.cpp \
         Melon/MelonLogger.cpp \
-    Melon/Chord.cpp
+        Melon/Chord.cpp \
+        Melon/ProgressionBuilder.cpp \
+    Melon/Progression.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -39,11 +41,14 @@ HEADERS += \
         Melon/Modes.h \
         Melon/Harmony.h \
         Melon/MelonLogger.h \
-    Melon/Chord.h
+        Melon/Chord.h \
+        Melon/ProgressionBuilder.h \
+    Melon/Progression.h
 
 FORMS += \
         mainwindow.ui
 
 DISTFILES += \
 
-QMAKE_CXXFLAGS += -Wsign-compare\
+QMAKE_CXXFLAGS += -Wsign-compare \
+                  -Wunused-variable \

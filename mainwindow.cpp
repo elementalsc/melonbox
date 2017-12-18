@@ -20,7 +20,7 @@ RootWindow::~RootWindow()
 
 void RootWindow::on_pushButton_clicked()
 {
-    ProgressionType prog;
+    Progression prog;
 
     int rInt = randomInt(0, 5);
     prog = hsuList[rInt];
@@ -32,6 +32,6 @@ void RootWindow::on_pushButton_clicked()
     // [ ] faire un tableau donnant l'historique de la création de la progression
     // [ ] donne la progression en degrés, puis en accords
     // [/] faire un logger qui est un singleton
-    ui->oProgDisplay->append(QString::fromStdString(ProgToString(prog)));
+    ui->oProgDisplay->append(QString::fromStdString(prog.toString()));
 }
 

@@ -1,7 +1,8 @@
 #include "Modes.h"
 #include "Chord.h"
 
-ModeType getModeType(Mode mode)
+ModeType
+getModeType(Mode mode)
 {
     switch (mode)
     {
@@ -23,7 +24,8 @@ ModeType getModeType(Mode mode)
     }
 }
 
-int Intervals(Mode mode, int degree)
+int
+Intervals(Mode mode, int degree)
 {
     switch (mode)
     {
@@ -38,7 +40,8 @@ int Intervals(Mode mode, int degree)
     }
 }
 
-int NextTriad(Mode mode, int degree)
+int
+NextTriad(Mode mode, int degree)
 {
     switch (mode)
     {
@@ -53,7 +56,8 @@ int NextTriad(Mode mode, int degree)
     }
 }
 
-int Position(Mode mode, int degree)
+int
+Position(Mode mode, int degree)
 {
     switch (mode)
     {
@@ -71,7 +75,8 @@ int Position(Mode mode, int degree)
 //
 //	INSERTING MODE CHORDS
 //
-void applyModeTriads(std::vector<Chord>& oProgression, Mode iMode, bool iNaturalOrHarmonic)
+void
+applyModeTriads(std::vector<Chord>& oProgression, Mode iMode, bool iNaturalOrHarmonic)
 {
     for(int i = 0; i < oProgression.size(); ++i)
     {

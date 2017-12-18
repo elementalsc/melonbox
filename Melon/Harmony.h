@@ -5,19 +5,23 @@
 #include "Modes.h"
 #include "Substitutions.h"
 #include "Chord.h"
+#include "Progression.h"
 
-using namespace std;
-typedef vector<Chord> ProgressionType;
+//typedef vector<Chord> Progression;
 
 #define melonException int
-#define VARIATION_FUNCTION_POINTER melonException (*)(ProgressionType&)
+#define VARIATION_FUNCTION_POINTER melonException (*)(Progression&)
 #define VARIATION_SUCCESS 1
 #define VARIATION_FAILURE 0
 
-vector<ProgressionType> hsuList =
+Progression progression_V_I;
+
+vector<Progression> hsuList =
 {
     // Basic Harmonic Strucutal Unit
 
+    progression_V_I
+    /*
     // V-I
     {
         Chord(5),
@@ -58,7 +62,7 @@ vector<ProgressionType> hsuList =
         Chord(2),
         Chord(5),
         Chord(1)
-    }
+    }*/
 };
 
 //=====================================================================================================================
@@ -66,11 +70,11 @@ vector<ProgressionType> hsuList =
 //=====================================================================================================================
 
 // Add tonic in front of the progression
-int hsuBasicVariation_AddTonicAtBeggining(ProgressionType& oProgression)
+int hsuBasicVariation_AddTonicAtBeggining(Progression& oProgression)
 {
-        if(oProgression[0] != Chord(1))
+    if(oProgression[0] != Chord(1))
 	{
-                oProgression.insert(oProgression.begin(), Chord(1));
+        oProgression.insertChord(Chord(1),0);
 		return VARIATION_SUCCESS;
 	}
 	
@@ -78,7 +82,7 @@ int hsuBasicVariation_AddTonicAtBeggining(ProgressionType& oProgression)
 }
 
 // Substitute V-I resolution for V-(IV|VI)
-int hsuBasicVariation_SubstituteFiveOneResolution(ProgressionType& oProgression)
+int hsuBasicVariation_SubstituteFiveOneResolution(Progression& oProgression)
 {
 	int wProgSizeMinusOne = oProgression.size() - 1;
 
@@ -101,14 +105,14 @@ int hsuBasicVariation_SubstituteFiveOneResolution(ProgressionType& oProgression)
 }
 
 // Stop oProgression after V
-int hsuBasicVariation_StopProgAfterDominant(ProgressionType& oProgression)
+int hsuBasicVariation_StopProgAfterDominant(Progression& oProgression)
 {
     // Starts iterating at one to avoid empty progression
     for(unsigned int i = 1; i < oProgression.size(); ++i)
     {
         if(oProgression[i] == Chord(5))
         {
-            oProgression.erase(oProgression.begin() + (++i), oProgression.end());
+            oProgression.removeChord(++i);
             return VARIATION_SUCCESS;
         }
     }
@@ -121,9 +125,9 @@ int hsuBasicVariation_StopProgAfterDominant(ProgressionType& oProgression)
 //=====================================================================================================================
 
 // Substitute a chord
-int hsuGenericVariation_Substitution(ProgressionType& oProgression)
+int hsuGenericVariation_Substitution(Progression& oProgression)
 {
-    vector<int> wRemainingChords = generateListOfIndex(oProgression);
+    std::vector<int> wRemainingChords = oProgression.indexList();
     int 	wProgIndex;
 
     for(int i = 0; i < oProgression.size(); ++i)
@@ -134,7 +138,7 @@ int hsuGenericVariation_Substitution(ProgressionType& oProgression)
         // If the targeted degree has available substitutions
         if(Substitutions::genericSubstitutions[wTargetChordDegree].size())
         {
-            oProgression[wProgIndex] =                                                                  // Assign new degree value at index...
+            oProgression[wProgIndex] =                                                           // Assign new degree value at index...
                     Substitutions::genericSubstitutions[wTargetChordDegree]                      // ...in this degree's possible substitutions
                     [randVectorIndex(Substitutions::genericSubstitutions[wTargetChordDegree])];  // ...a random possibile substitute
             return VARIATION_SUCCESS;
@@ -149,10 +153,10 @@ int hsuGenericVariation_Substitution(ProgressionType& oProgression)
 }
 
 //  Insert a chord before another one
-int hsuGenericVariation_Interpolation(ProgressionType& oProgression)
+int hsuGenericVariation_Interpolation(Progression& oProgression)
 {
-        vector<int> wRemainingChords = generateListOfIndex(oProgression);
-    int 		wProgIndex;
+    std::vector<int> wRemainingChords = oProgression.indexList();
+    int              wProgIndex;
 
     for(int i = 0; i < oProgression.size(); ++i)
     {
@@ -162,9 +166,12 @@ int hsuGenericVariation_Interpolation(ProgressionType& oProgression)
         // If the targeted degree has available interpolations
         if(Substitutions::genericInterpolations[wTargetChordDegree].size())
         {
+            oProgression.insertChord(Substitutions::genericInterpolations[wTargetChordDegree][randVectorIndex(Substitutions::genericInterpolations[wTargetChordDegree])],wProgIndex);
+            /*
             insertAtIndex(oProgression, wProgIndex,                                      			// Insert new concept chord at index...
                           Substitutions::genericInterpolations[wTargetChordDegree]                       // ...in this degree's possible interpolations
                           [randVectorIndex(Substitutions::genericInterpolations[wTargetChordDegree])]);  // ...a random possibile interpolated chord
+                          */
 
             return VARIATION_SUCCESS;
         }
@@ -179,12 +186,12 @@ int hsuGenericVariation_Interpolation(ProgressionType& oProgression)
 
 // Circle of fifths
 // Between two concept chords,
-int hsuGenericVariation_CircleOfFifthInsertion(ProgressionType& oProgression)
+int hsuGenericVariation_CircleOfFifthInsertion(Progression& oProgression)
 {
     // select two consecutive chords
 
     // compare if the correspond to a 3 chords sequence of the circle of 5th to insert a degree in between
-    ProgressionType circleOfFifth = {Chord(1),Chord(4),Chord(7),Chord(3),Chord(6),Chord(2),Chord(5)};
+    Progression circleOfFifth = {Chord(1),Chord(4),Chord(7),Chord(3),Chord(6),Chord(2),Chord(5)};
 
     //
 
@@ -195,10 +202,10 @@ int hsuGenericVariation_CircleOfFifthInsertion(ProgressionType& oProgression)
 //=====================================================================================================================
 
 // Insert a secondary fifth degree on a randomly selected chord that is not a tonic or leading
-int hsuAlterativeVariation_AddSecondaryDominant(ProgressionType& oProgression)
+int hsuAlterativeVariation_AddSecondaryDominant(Progression& oProgression)
 {
-    vector<int> wRemainingChords = generateListOfIndex(oProgression);
-    int 		wProgIndex;
+    std::vector<int> wRemainingChords = oProgression.indexList();
+    int              wProgIndex;
 
     for(int i = 0; i < oProgression.size(); ++i)
     {
@@ -210,8 +217,11 @@ int hsuAlterativeVariation_AddSecondaryDominant(ProgressionType& oProgression)
             // If the previous chord is not a secondary degree, or if it's the first of the progression
             if((wProgIndex > 0 && oProgression[wProgIndex - 1].mSecondaryDegree == NoSecondaryDegree))
             {
+                oProgression.insertChord(Chord(oProgression[wProgIndex].mDegree).SecondaryDegree(SecondaryDegree::V),wProgIndex);
+                /*
                 insertAtIndex(oProgression, wProgIndex, Chord(oProgression[wProgIndex].mDegree).SecondaryDegree(SecondaryDegree::V));
                 return VARIATION_SUCCESS;
+                */
             }
         }
     }
@@ -220,18 +230,18 @@ int hsuAlterativeVariation_AddSecondaryDominant(ProgressionType& oProgression)
 }
 
 // Substitute a chord with a chord from another mode
-int hsuAlterativeVariation_ModalMixture(ProgressionType& oProgression)
+int hsuAlterativeVariation_ModalMixture(Progression& oProgression)
 {
-
-    vector<int>     wRemainingChordIndexes = generateListOfIndex(oProgression);
-    int             wProgIndex;
+/*
+    std::vector<int> wRemainingChordIndexes = oProgression.indexList();
+    int              wProgIndex;
 
     for(unsigned int i = 0; ( i < oProgression.size()); ++i)
     {
         wProgIndex = randVectorIndex(wRemainingChordIndexes);
 
         // VDMILLET :  ADD NUANCE FOR MAJOR/MINOR MODE           // "1" here is for "Major Mode chord substitutes"
-        ProgressionType wSubstitutes = Substitutions::modalSubstitutions[1][oProgression[i].mDegree];
+        Progression wSubstitutes = Substitutions::modalSubstitutions[1][oProgression[i].mDegree];
 
         // if this chord has modal substitutes
         if(wSubstitutes.size() >= 1 && oProgression[wProgIndex].mSecondaryDegree == NoSecondaryDegree)
@@ -244,7 +254,7 @@ int hsuAlterativeVariation_ModalMixture(ProgressionType& oProgression)
             }
         }
     }
-
+*/
     return VARIATION_FAILURE;
 }
 
@@ -282,26 +292,6 @@ vector<VARIATION_FUNCTION_POINTER> allVariationFunctions =
     hsuAlterativeVariation_ModalMixture*/
 };
 
-//=====================================================================================================================
-// UTILS
-//=====================================================================================================================
-
-string ProgToString(ProgressionType& oProgression)
-{
-    string oString;
-
-    for (Chord Chord : oProgression)
-    {
-        oString.append(Chord.toString());
-        oString.append(" - ");
-    }
-
-    return oString.substr(0, oString.size() - 3);
-}
-
-
-
-
 
 
 //====================================================================================================================
@@ -309,11 +299,11 @@ string ProgToString(ProgressionType& oProgression)
 //====================================================================================================================
 
 // This function will attempt the available hsu variations on randomly selected chords of the progression
-int applyVariation(ProgressionType& oProgression, int iVariationAmount, vector<VARIATION_FUNCTION_POINTER> iVariationFunctions)
+int applyVariation(Progression& oProgression, int iVariationAmount, vector<VARIATION_FUNCTION_POINTER> iVariationFunctions)
 {
     for(int wPass = 0; wPass < iVariationAmount; ++wPass)
     {
-        vector<int> wRemainingVariations;
+        std::vector<int> wRemainingVariations;
 
         // Create a vector containing a  continous list of int (0,1,2,3...) for all the variationFunctions
         // vector possible indexes. Each attempted index will be removed from the vector, so it is not attempted

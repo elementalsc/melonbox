@@ -1,6 +1,7 @@
 #include "MelonUtil.h"
 
-int randomInt(int min, int max)
+int
+randomInt(int min, int max)
 {
     /*std::random_device rd;
     std::mt19937 rng(rd());
@@ -10,7 +11,8 @@ int randomInt(int min, int max)
     return min + (rand() % static_cast<int>(max - min + 1));
 }
 
-bool Probability(int percentageOfSuccess)
+bool
+Probability(int percentageOfSuccess)
 {
     return percentageOfSuccess >= randomInt(1, 100);
 }
