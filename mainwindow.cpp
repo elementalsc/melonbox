@@ -21,11 +21,13 @@ RootWindow::~RootWindow()
 void RootWindow::on_pushButton_clicked()
 {
     ProgressionType prog;
-    Mode mode = Ionian;
 
     int rInt = randomInt(0, 5);
     prog = hsuList[rInt];
     applyVariation(prog,ui->variationNumber->value(),allVariationFunctions);
+
+    // créer ProgressionBuilder
+    //
 
     // [ ] faire un tableau donnant l'historique de la création de la progression
     // [ ] donne la progression en degrés, puis en accords

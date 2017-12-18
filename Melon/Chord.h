@@ -6,23 +6,24 @@
 
 enum Note
 {
-    C   = 0,
-    Cs  = 1,
-    Db  = 1,
-    D   = 2,
-    Ds  = 3,
-    Eb  = 3,
-    E   = 4,
-    F   = 5,
-    Fs  = 6,
-    Gb  = 6,
-    G   = 7,
-    Gs  = 8,
-    Ab  = 8,
-    A   = 9,
-    As  = 10,
-    Bb  = 10,
-    B   = 11
+    NoDefinedNote = 0,
+    C   = 1,
+    Cs  = 2,
+    Db  = 2,
+    D   = 3,
+    Ds  = 4,
+    Eb  = 4,
+    E   = 5,
+    F   = 6,
+    Fs  = 7,
+    Gb  = 7,
+    G   = 8,
+    Gs  = 9,
+    Ab  = 9,
+    A   = 10,
+    As  = 11,
+    Bb  = 11,
+    B   = 12
 };
 
 enum Triad
@@ -108,12 +109,15 @@ enum SecondaryDegree
 
 
 
-class ConceptChord
+class Chord
 {
 
 public:
 
     int mDegree;
+    Note            mRoot               = NoDefinedNote;
+    Note            mScale              = NoDefinedNote;
+
     Triad           mTriad              = NoDefinedTriad;
     Inversion       mInversion          = Root;
     Alteration      mAlteration         = NoAlteration;
@@ -121,41 +125,41 @@ public:
     AddedDegree     mAddedDegree        = NoAddedDegree;
     SecondaryDegree mSecondaryDegree	= NoSecondaryDegree;
 
-    virtual ~ConceptChord() = default;
+    virtual ~Chord() = default;
 
 //=====================================================================================================================
 // CONSTRUCTORS
 //=====================================================================================================================
 
-    ConceptChord() {}
+    Chord() {}
 
-    ConceptChord(int degree) :
+    Chord(int degree) :
         mDegree(degree)
     {}
 
-    ConceptChord(int degree, Triad triad) :
+    Chord(int degree, Triad triad) :
         mDegree(degree),
         mTriad(triad)
     {}
 
-    ConceptChord(int degree, Inversion inversion) :
+    Chord(int degree, Inversion inversion) :
         mDegree(degree),
         mInversion(inversion)
     {}
 
-    ConceptChord(int degree, Triad triad, Alteration alteration) :
+    Chord(int degree, Triad triad, Alteration alteration) :
         mDegree(degree),
         mTriad(triad),
         mAlteration(alteration)
     {}
 
-    ConceptChord(int degree, Triad triad, Inversion inversion) :
+    Chord(int degree, Triad triad, Inversion inversion) :
         mDegree(degree),
         mTriad(triad),
         mInversion(inversion)
     {}
 
-    ConceptChord(int degree, Triad triad, Inversion inversion, Alteration alteration) :
+    Chord(int degree, Triad triad, Inversion inversion, Alteration alteration) :
         mDegree(degree),
         mTriad(triad),
         mInversion(inversion),
@@ -166,36 +170,36 @@ public:
 //	FLUENT SETTERS
 //=====================================================================================================================
 
-    ConceptChord& Triad(Triad triad)
+    Chord& Triad(Triad triad)
     {
         mTriad = triad;
         return *this;
     }
 
-    ConceptChord& Inversion(Inversion inversion)
+    Chord& Inversion(Inversion inversion)
     {
         mInversion = inversion;
         return *this;
     }
 
-    ConceptChord& Alteration(Alteration alteration)
+    Chord& Alteration(Alteration alteration)
     {
         mAlteration = alteration;
         return *this;
     }
 
-    ConceptChord& AddedDegree(AddedDegree addedDegree)
+    Chord& AddedDegree(AddedDegree addedDegree)
     {
         mAddedDegree = addedDegree;
         return *this;
     }
 
-    ConceptChord& SuspendedDegree(SuspendedDegree suspendedDegree)
+    Chord& SuspendedDegree(SuspendedDegree suspendedDegree)
     {
         mSuspendedDegree = suspendedDegree;
         return *this;
     }
-    ConceptChord& SecondaryDegree(SecondaryDegree secondaryDegree)
+    Chord& SecondaryDegree(SecondaryDegree secondaryDegree)
     {
         mSecondaryDegree = secondaryDegree;
         return *this;
@@ -205,7 +209,7 @@ public:
 //	OPERATORS
 //=====================================================================================================================
 
-    bool operator==(const ConceptChord& other) const
+    bool operator==(const Chord& other) const
     {
         if (
             mDegree		== other.mDegree &&
@@ -225,7 +229,7 @@ public:
         }
     }
 
-    bool operator!=(const ConceptChord& other) const
+    bool operator!=(const Chord& other) const
     {
         if (!(*this == other))
         {

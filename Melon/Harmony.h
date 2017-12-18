@@ -4,11 +4,10 @@
 #include "MelonUtil.h"
 #include "Modes.h"
 #include "Substitutions.h"
-#include "ConceptChord.h"
+#include "Chord.h"
 
 using namespace std;
-
-typedef vector<ConceptChord> ProgressionType;
+typedef vector<Chord> ProgressionType;
 
 #define melonException int
 #define VARIATION_FUNCTION_POINTER melonException (*)(ProgressionType&)
@@ -21,44 +20,44 @@ vector<ProgressionType> hsuList =
 
     // V-I
     {
-        ConceptChord(5),
-        ConceptChord(1)
+        Chord(5),
+        Chord(1)
     },
 
     // IV-I
     {
-        ConceptChord(4),
-        ConceptChord(1)
+        Chord(4),
+        Chord(1)
     },
 
     // II-V-I
     {
-        ConceptChord(2),
-        ConceptChord(5),
-        ConceptChord(1)
+        Chord(2),
+        Chord(5),
+        Chord(1)
     },
 
     // VI-V-I
     {
-        ConceptChord(6),
-        ConceptChord(5),
-        ConceptChord(1)
+        Chord(6),
+        Chord(5),
+        Chord(1)
     },
 
     // VI-II-V-I
     {
-        ConceptChord(6),
-        ConceptChord(2),
-        ConceptChord(5),
-        ConceptChord(1)
+        Chord(6),
+        Chord(2),
+        Chord(5),
+        Chord(1)
     },
 
     // III-II-V-I
     {
-        ConceptChord(3),
-        ConceptChord(2),
-        ConceptChord(5),
-        ConceptChord(1)
+        Chord(3),
+        Chord(2),
+        Chord(5),
+        Chord(1)
     }
 };
 
@@ -69,9 +68,9 @@ vector<ProgressionType> hsuList =
 // Add tonic in front of the progression
 int hsuBasicVariation_AddTonicAtBeggining(ProgressionType& oProgression)
 {
-	if(oProgression[0] != ConceptChord(1))
+        if(oProgression[0] != Chord(1))
 	{
-		oProgression.insert(oProgression.begin(), ConceptChord(1));
+                oProgression.insert(oProgression.begin(), Chord(1));
 		return VARIATION_SUCCESS;
 	}
 	
@@ -83,17 +82,17 @@ int hsuBasicVariation_SubstituteFiveOneResolution(ProgressionType& oProgression)
 {
 	int wProgSizeMinusOne = oProgression.size() - 1;
 
-	if(oProgression[wProgSizeMinusOne] == ConceptChord(1) &&
-	   oProgression[wProgSizeMinusOne] == ConceptChord(5))
+        if(oProgression[wProgSizeMinusOne] == Chord(1) &&
+           oProgression[wProgSizeMinusOne] == Chord(5))
 	{
 		if (Probability(50))
 		{
-			oProgression[wProgSizeMinusOne] = ConceptChord(4);
+                        oProgression[wProgSizeMinusOne] = Chord(4);
 			return VARIATION_SUCCESS;
 		}
 		else
 		{
-			oProgression[wProgSizeMinusOne] = ConceptChord(6);
+                        oProgression[wProgSizeMinusOne] = Chord(6);
 			return VARIATION_SUCCESS;
 		}
 	}
@@ -107,7 +106,7 @@ int hsuBasicVariation_StopProgAfterDominant(ProgressionType& oProgression)
     // Starts iterating at one to avoid empty progression
     for(unsigned int i = 1; i < oProgression.size(); ++i)
     {
-        if(oProgression[i] == ConceptChord(5))
+        if(oProgression[i] == Chord(5))
         {
             oProgression.erase(oProgression.begin() + (++i), oProgression.end());
             return VARIATION_SUCCESS;
@@ -130,14 +129,14 @@ int hsuGenericVariation_Substitution(ProgressionType& oProgression)
     for(int i = 0; i < oProgression.size(); ++i)
     {
         wProgIndex = randVectorIndex(wRemainingChords);
-        int wTargetConceptChordDegree = oProgression[wProgIndex].mDegree;
+        int wTargetChordDegree = oProgression[wProgIndex].mDegree;
 
         // If the targeted degree has available substitutions
-        if(Substitutions::genericSubstitutions[wTargetConceptChordDegree].size())
+        if(Substitutions::genericSubstitutions[wTargetChordDegree].size())
         {
             oProgression[wProgIndex] =                                                                  // Assign new degree value at index...
-                    Substitutions::genericSubstitutions[wTargetConceptChordDegree]                      // ...in this degree's possible substitutions
-                    [randVectorIndex(Substitutions::genericSubstitutions[wTargetConceptChordDegree])];  // ...a random possibile substitute
+                    Substitutions::genericSubstitutions[wTargetChordDegree]                      // ...in this degree's possible substitutions
+                    [randVectorIndex(Substitutions::genericSubstitutions[wTargetChordDegree])];  // ...a random possibile substitute
             return VARIATION_SUCCESS;
         }
         else
@@ -158,14 +157,14 @@ int hsuGenericVariation_Interpolation(ProgressionType& oProgression)
     for(int i = 0; i < oProgression.size(); ++i)
     {
         wProgIndex = randVectorIndex(wRemainingChords);
-        int wTargetConceptChordDegree = oProgression[wProgIndex].mDegree;
+        int wTargetChordDegree = oProgression[wProgIndex].mDegree;
 
         // If the targeted degree has available interpolations
-        if(Substitutions::genericInterpolations[wTargetConceptChordDegree].size())
+        if(Substitutions::genericInterpolations[wTargetChordDegree].size())
         {
             insertAtIndex(oProgression, wProgIndex,                                      			// Insert new concept chord at index...
-                          Substitutions::genericInterpolations[wTargetConceptChordDegree]                       // ...in this degree's possible interpolations
-                          [randVectorIndex(Substitutions::genericInterpolations[wTargetConceptChordDegree])]);  // ...a random possibile interpolated chord
+                          Substitutions::genericInterpolations[wTargetChordDegree]                       // ...in this degree's possible interpolations
+                          [randVectorIndex(Substitutions::genericInterpolations[wTargetChordDegree])]);  // ...a random possibile interpolated chord
 
             return VARIATION_SUCCESS;
         }
@@ -185,7 +184,7 @@ int hsuGenericVariation_CircleOfFifthInsertion(ProgressionType& oProgression)
     // select two consecutive chords
 
     // compare if the correspond to a 3 chords sequence of the circle of 5th to insert a degree in between
-    ProgressionType circleOfFifth = {ConceptChord(1),ConceptChord(4),ConceptChord(7),ConceptChord(3),ConceptChord(6),ConceptChord(2),ConceptChord(5)};
+    ProgressionType circleOfFifth = {Chord(1),Chord(4),Chord(7),Chord(3),Chord(6),Chord(2),Chord(5)};
 
     //
 
@@ -211,7 +210,7 @@ int hsuAlterativeVariation_AddSecondaryDominant(ProgressionType& oProgression)
             // If the previous chord is not a secondary degree, or if it's the first of the progression
             if((wProgIndex > 0 && oProgression[wProgIndex - 1].mSecondaryDegree == NoSecondaryDegree))
             {
-                insertAtIndex(oProgression, wProgIndex, ConceptChord(oProgression[wProgIndex].mDegree).SecondaryDegree(SecondaryDegree::V));
+                insertAtIndex(oProgression, wProgIndex, Chord(oProgression[wProgIndex].mDegree).SecondaryDegree(SecondaryDegree::V));
                 return VARIATION_SUCCESS;
             }
         }
@@ -291,9 +290,9 @@ string ProgToString(ProgressionType& oProgression)
 {
     string oString;
 
-    for (ConceptChord conceptChord : oProgression)
+    for (Chord Chord : oProgression)
     {
-        oString.append(conceptChord.toString());
+        oString.append(Chord.toString());
         oString.append(" - ");
     }
 

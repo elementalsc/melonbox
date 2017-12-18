@@ -3,8 +3,8 @@
 
 #include <vector>
 #include <iostream>
-#include "ConceptChord.h"
 
+class Chord;
 typedef std::vector<int> NoteVector;
 
 enum Mode
@@ -71,6 +71,6 @@ int Position(Mode mode, int degree);
 //
 //	INSERTING MODE CHORDS
 //
-void applyModeTriads(std::vector<ConceptChord>& oProgression, Mode iMode, bool iNaturalOrHarmonic = true);
+void applyModeTriads(std::vector<Chord>& oProgression, Mode iMode, bool iNaturalOrHarmonic = true);
 
 #endif // MODES_H

@@ -1,12 +1,12 @@
 #ifndef SUBSTITUTIONS_H
 #define SUBSTITUTIONS_H
 
-#include "ConceptChord.h"
+#include "Chord.h"
 using namespace std;
 
 namespace Substitutions
 {
-    vector<vector<ConceptChord>> genericSubstitutions =
+    vector<vector<Chord>> genericSubstitutions =
     {
         {},	// index 0 empty for readability
 
@@ -16,16 +16,16 @@ namespace Substitutions
 
             // 1st degree
         {
-            ConceptChord(1, Inversion::Six),
-            ConceptChord(6),
-            ConceptChord(6,	Inversion::Six),
-            ConceptChord(3)
+            Chord(1, Inversion::Six),
+            Chord(6),
+            Chord(6, Inversion::Six),
+            Chord(3)
         },
 
         // 2nd degree
         {
-            ConceptChord(2, Inversion::Six),
-            ConceptChord(4)
+            Chord(2, Inversion::Six),
+            Chord(4)
         },
 
         // 3rd degree
@@ -35,16 +35,16 @@ namespace Substitutions
 
         // 4th degree
         {
-            ConceptChord(2),
-            ConceptChord(2, Inversion::Six),
-            ConceptChord(6,	Inversion::Six)
+            Chord(2),
+            Chord(2, Inversion::Six),
+            Chord(6, Inversion::Six)
         },
 
         // 5th degree
         {
-            ConceptChord(5, Inversion::Six),
-            ConceptChord(1,	Inversion::SixFour),
-            ConceptChord(3,	Inversion::Six)
+            Chord(5, Inversion::Six),
+            Chord(1, Inversion::SixFour),
+            Chord(3, Inversion::Six)
         },
 
         // 6th degree
@@ -58,7 +58,7 @@ namespace Substitutions
         }
     };
 
-    vector<vector<ConceptChord>> genericInterpolations =
+    vector<vector<Chord>> genericInterpolations =
     {
         {},	// index 0 empty for readability
 
@@ -68,7 +68,7 @@ namespace Substitutions
 
         // 2nd degree
         {
-            ConceptChord(4),
+            Chord(4),
         },
 
         // 3rd degree
@@ -78,12 +78,12 @@ namespace Substitutions
 
         // 4th degree
         {
-            ConceptChord(2),
+            Chord(2),
         },
 
         // 5th degree
         {
-            ConceptChord(1,	Inversion::SixFour)
+            Chord(1, Inversion::SixFour)
         },
 
         // 6th degree
@@ -101,7 +101,7 @@ namespace Substitutions
     // utiliser des critères comme...
     //      "pas plus d'une ou deux notes hors gamme"
     //      "interdiction de modifier tonique ou dominante"
-    vector<vector<vector<ConceptChord>>> modalSubstitutions =
+    vector<vector<vector<Chord>>> modalSubstitutions =
     {
         // index 0 empty for readability
         {},
@@ -115,37 +115,37 @@ namespace Substitutions
 
             // 1st degree : Parallel minor
             {
-                ConceptChord(1,	Triad::MinorTriad)
+                Chord(1, Triad::MinorTriad)
             },
 
             // 2nd degree : Parallel minor, V/II
             {
-                ConceptChord(2,	Triad::MajorTriad)
+                Chord(2, Triad::MajorTriad)
             },
 
             // 3rd degree : Parallel minor, V/III
             {
-                ConceptChord(3,	Triad::MajorTriad)
+                Chord(3, Triad::MajorTriad)
             },
 
             // 4th degree : Parallel minor, Neapolitan sixth
             {
-                ConceptChord(2,	Triad::MajorTriad, Inversion::Six, Alteration::Flat)
+                Chord(2, Triad::MajorTriad, Inversion::Six, Alteration::Flat)
             },
 
             // 5th degree : Parallel minor, V/V
             {
-                ConceptChord(5,	Triad::MinorTriad)
+                Chord(5, Triad::MinorTriad)
             },
 
             // 6th degree : Parallel minor, V/VI
             {
-                ConceptChord(6,	Triad::MajorTriad)
+                Chord(6, Triad::MajorTriad)
             },
 
             // 7th degree : Flat major 7th
             {
-                ConceptChord(7,	Triad::MajorTriad, Alteration::Flat)
+                Chord(7, Triad::MajorTriad, Alteration::Flat)
             }
         },
 

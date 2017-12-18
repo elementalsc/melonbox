@@ -1,4 +1,5 @@
 #include "Modes.h"
+#include "Chord.h"
 
 ModeType getModeType(Mode mode)
 {
@@ -70,7 +71,7 @@ int Position(Mode mode, int degree)
 //
 //	INSERTING MODE CHORDS
 //
-void applyModeTriads(std::vector<ConceptChord>& oProgression, Mode iMode, bool iNaturalOrHarmonic)
+void applyModeTriads(std::vector<Chord>& oProgression, Mode iMode, bool iNaturalOrHarmonic)
 {
     for(int i = 0; i < oProgression.size(); ++i)
     {
