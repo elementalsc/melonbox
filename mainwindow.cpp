@@ -1,9 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-#include "Melon/Harmony.h"
-#include "Melon/Progression.h"
-
 using namespace std;
 
 RootWindow::RootWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::RootWindow)
@@ -20,7 +17,7 @@ RootWindow::~RootWindow()
 
 void RootWindow::on_pushButton_clicked()
 {
-    Progression prog;
+    /*Progression prog;
 
     int rInt = randomInt(0, 5);
     prog = hsuList[rInt];
@@ -33,5 +30,6 @@ void RootWindow::on_pushButton_clicked()
     // [ ] donne la progression en degrés, puis en accords
     // [/] faire un logger qui est un singleton
     ui->oProgDisplay->append(QString::fromStdString(prog.toString()));
+*/
 }
 

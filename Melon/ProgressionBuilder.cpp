@@ -72,11 +72,11 @@ int ProgressionBuilder::hsuGenericVariation_Substitution(Progression& oProgressi
         int wTargetChordDegree = oProgression[wProgIndex].mDegree;
 
         // If the targeted degree has available substitutions
-        if(Substitutions::genericSubstitutions[wTargetChordDegree].size())
+        if(genericSubstitutions[wTargetChordDegree].size())
         {
             oProgression[wProgIndex] =                                                           // Assign new degree value at index...
-                    Substitutions::genericSubstitutions[wTargetChordDegree]                      // ...in this degree's possible substitutions
-                    [randVectorIndex(Substitutions::genericSubstitutions[wTargetChordDegree].mChords)];  // ...a random possibile substitute
+                    genericSubstitutions[wTargetChordDegree]                      // ...in this degree's possible substitutions
+                    [randVectorIndex(genericSubstitutions[wTargetChordDegree].mChords)];  // ...a random possibile substitute
             return VARIATION_SUCCESS;
         }
         else
@@ -100,9 +100,9 @@ int ProgressionBuilder::hsuGenericVariation_Interpolation(Progression& oProgress
         int wTargetChordDegree = oProgression[wProgIndex].mDegree;
 
         // If the targeted degree has available interpolations
-        if(Substitutions::genericInterpolations[wTargetChordDegree].size())
+        if(genericInterpolations[wTargetChordDegree].size())
         {
-            oProgression.insertChord(Substitutions::genericInterpolations[wTargetChordDegree][randVectorIndex(Substitutions::genericInterpolations[wTargetChordDegree].mChords)],wProgIndex);
+            oProgression.insertChord(genericInterpolations[wTargetChordDegree][randVectorIndex(genericInterpolations[wTargetChordDegree].mChords)],wProgIndex);
             return VARIATION_SUCCESS;
         }
         else
@@ -154,7 +154,7 @@ int ProgressionBuilder::hsuAlterativeVariation_ModalMixture(Progression& oProgre
         wProgIndex = randVectorIndex(wRemainingChordIndexes);
 
         // VDMILLET :  ADD NUANCE FOR MAJOR/MINOR MODE           // "1" here is for "Major Mode chord substitutes"
-        Progression wSubstitutes = Substitutions::modalSubstitutions[1][oProgression[i].mDegree];
+        Progression wSubstitutes = modalSubstitutions[1][oProgression[i].mDegree];
 
         // if this chord has modal substitutes
         if(wSubstitutes.size() >= 1 && oProgression[wProgIndex].mSecondaryDegree == NoSecondaryDegree)
@@ -173,7 +173,7 @@ int ProgressionBuilder::hsuAlterativeVariation_ModalMixture(Progression& oProgre
 
 
 // This function will RANDOMLY attempt the available hsu variations on RANDOMLY selected chords of the progression
-int ProgressionBuilder::applyVariation(Progression& oProgression, int iVariationAmount, vector<VARIATION_FUNCTION_POINTER> iVariationFunctions)
+int ProgressionBuilder::applyVariation(Progression& oProgression, int iVariationAmount, std::vector<VARIATION_FUNCTION_POINTER> iVariationFunctions)
 {
     for(int wPass = 0; wPass < iVariationAmount; ++wPass)
     {
@@ -187,7 +187,7 @@ int ProgressionBuilder::applyVariation(Progression& oProgression, int iVariation
             // remove it from possible inputs
             wCase = randVectorIndex(wRemainingVariations);
 
-            if(iVariationFunctions[wCase](oProgression))
+            if((this->*iVariationFunctions[wCase])(oProgression))
             {
                 return VARIATION_SUCCESS;
             }
