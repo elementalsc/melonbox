@@ -17,6 +17,6 @@ public:
     void operator=(MelonLogger const&)  = delete;
 
 
-};
+}; // class MelonLogger
 
 #endif // MELONLOGGER_H

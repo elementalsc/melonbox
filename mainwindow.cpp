@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "Melon/ProgressionBuilder.h"
 
 using namespace std;
 
@@ -29,7 +30,10 @@ void RootWindow::on_pushButton_clicked()
     // [ ] faire un tableau donnant l'historique de la création de la progression
     // [ ] donne la progression en degrés, puis en accords
     // [/] faire un logger qui est un singleton
-    ui->oProgDisplay->append(QString::fromStdString(prog.toString()));
-*/
+ */
+
+    ProgressionBuilder progBuilder;
+    ui->oProgDisplay->append(QString::fromStdString(progBuilder.generate().toString()));
+
 }
 

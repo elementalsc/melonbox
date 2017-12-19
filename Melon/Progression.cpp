@@ -1,16 +1,17 @@
 #include "Progression.h"
 
-Progression::Progression(){}
-
-Progression::Progression(std::vector<Chord> iChords)
-{
-    mChords = iChords;
-}
+//=====================================================================================================================
+// OPERATORS
+//=====================================================================================================================
 
 Chord& Progression::operator[](int iIndex)
 {
     return mChords[iIndex];
 }
+
+//=====================================================================================================================
+// METHODS
+//=====================================================================================================================
 
 int Progression::size()
 {
@@ -38,7 +39,6 @@ std::string Progression::toString()
     }
 
     return oString.substr(0, oString.size() - 3);
-
 }
 
 std::vector<int> Progression::indexList()

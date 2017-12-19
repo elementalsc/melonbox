@@ -1,6 +1,8 @@
 #include "Modes.h"
 #include "Chord.h"
+#include "Progression.h"
 
+/* useless?
 ModeType
 getModeType(Mode mode)
 {
@@ -20,9 +22,10 @@ getModeType(Mode mode)
         return ModeType::DiminishedMode; break;
 
     default:
-        return ModeType::NoDefinedMode; break;
+        return ModeType::NoDefinedModeType; break;
     }
 }
+*/
 
 int
 Intervals(Mode mode, int degree)
@@ -76,7 +79,7 @@ Position(Mode mode, int degree)
 //	INSERTING MODE CHORDS
 //
 void
-applyModeTriads(std::vector<Chord>& oProgression, Mode iMode, bool iNaturalOrHarmonic)
+applyModeTriads(Progression& oProgression, Mode iMode, bool iNaturalOrHarmonic)
 {
     for(int i = 0; i < oProgression.size(); ++i)
     {

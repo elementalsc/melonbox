@@ -10,26 +10,52 @@ class Progression
 {
 public:
 
-    std::vector<Chord>  mChords;
-    Note                mRoot;
-    Note                mScale;
-    Mode                mMode;
+    std::vector<Chord>  mChords = {};
+    Note                mScale  = NoDefinedNote;
+    Mode                mMode   = NoDefinedMode;
 
-    Progression();
-    Progression(std::vector<Chord> iChords);
+//=====================================================================================================================
+// CONSTRUCTORS
+//=====================================================================================================================
 
-    // Replication of vector functions
+    Progression()
+    {}
+
+    Progression(std::vector<Chord> iChords) :
+        mChords(iChords)
+    {}
+
+    Progression(std::vector<Chord> iChords, Note iScale, Mode iMode) :
+        mChords(iChords),
+        mScale(iScale),
+        mMode(iMode)
+    {}
+
+
+//=====================================================================================================================
+// REPLICATION OF VECTOR METHODS
+//=====================================================================================================================
+
     Chord& operator[](int iIndex);
     int  size();
     void removeChord(int wIndex);
     void insertChord(Chord iChord, int wIndex);
 
-    // Fluent chord appender
+
+//=====================================================================================================================
+// BASIC HARMONIC STRUCTURAL UNIT
+//=====================================================================================================================
+
     Progression& append(const Chord& iChord)
     {
         mChords.push_back(iChord);
         return *this;
     }
+
+
+//=====================================================================================================================
+// METHODS
+//=====================================================================================================================
 
     // Returns vector of "remaning chords" ({0,1,2,3}) for Harmony.h use
     std::vector<int> indexList();
@@ -37,6 +63,6 @@ public:
     // toString
     std::string toString();
 
-};
+}; // class Progression
 
 #endif // PROGRESSION_H

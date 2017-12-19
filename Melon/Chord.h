@@ -111,8 +111,8 @@ class Chord
 
 public:
 
-    int              mDegree;
-    std::vector<int> mNotes;
+    int              mDegree             = 0;
+    std::vector<int> mNotes              = {};
     Note             mRoot               = NoDefinedNote;
     Note             mScale              = NoDefinedNote;
     Triad            mTriad              = NoDefinedTriad;
@@ -130,75 +130,75 @@ public:
 
     Chord() {}
 
-    Chord(int degree) :
-        mDegree(degree)
+    Chord(int iDegree) :
+        mDegree(iDegree)
     {}
 
-    Chord(int degree, Triad triad) :
-        mDegree(degree),
-        mTriad(triad)
+    Chord(int iDegree, Triad iTriad) :
+        mDegree(iDegree),
+        mTriad(iTriad)
     {}
 
-    Chord(int degree, Inversion inversion) :
-        mDegree(degree),
-        mInversion(inversion)
+    Chord(int iDegree, Inversion iInversion) :
+        mDegree(iDegree),
+        mInversion(iInversion)
     {}
 
-    Chord(int degree, Triad triad, Alteration alteration) :
-        mDegree(degree),
-        mTriad(triad),
-        mAlteration(alteration)
+    Chord(int iDegree, Triad iTriad, Alteration iAlteration) :
+        mDegree(iDegree),
+        mTriad(iTriad),
+        mAlteration(iAlteration)
     {}
 
-    Chord(int degree, Triad triad, Inversion inversion) :
-        mDegree(degree),
-        mTriad(triad),
-        mInversion(inversion)
+    Chord(int iDegree, Triad iTriad, Inversion iInversion) :
+        mDegree(iDegree),
+        mTriad(iTriad),
+        mInversion(iInversion)
     {}
 
-    Chord(int degree, Triad triad, Inversion inversion, Alteration alteration) :
-        mDegree(degree),
-        mTriad(triad),
-        mInversion(inversion),
-        mAlteration(alteration)
+    Chord(int iDegree, Triad iTriad, Inversion iInversion, Alteration iAlteration) :
+        mDegree(iDegree),
+        mTriad(iTriad),
+        mInversion(iInversion),
+        mAlteration(iAlteration)
     {}
 
 //=====================================================================================================================
 //	FLUENT SETTERS
 //=====================================================================================================================
 
-    Chord& Triad(Triad triad)
+    Chord& Triad(Triad&& iTriad)
     {
-        mTriad = triad;
+        mTriad = std::move(iTriad);
         return *this;
     }
 
-    Chord& Inversion(Inversion inversion)
+    Chord& Inversion(Inversion&& iInversion)
     {
-        mInversion = inversion;
+        mInversion = std::move(iInversion);
         return *this;
     }
 
-    Chord& Alteration(Alteration alteration)
+    Chord& Alteration(Alteration&& iAlteration)
     {
-        mAlteration = alteration;
+        mAlteration = std::move(iAlteration);
         return *this;
     }
 
-    Chord& AddedDegree(AddedDegree addedDegree)
+    Chord& Add(AddedDegree&& iAddedDegree)
     {
-        mAddedDegree = addedDegree;
+        mAddedDegree = std::move(iAddedDegree);
         return *this;
     }
 
-    Chord& SuspendedDegree(SuspendedDegree suspendedDegree)
+    Chord& Sus(SuspendedDegree&& iSuspendedDegree)
     {
-        mSuspendedDegree = suspendedDegree;
+        mSuspendedDegree = std::move(iSuspendedDegree);
         return *this;
     }
-    Chord& SecondaryDegree(SecondaryDegree secondaryDegree)
+    Chord& SecondaryDegree(SecondaryDegree&& iSecondaryDegree)
     {
-        mSecondaryDegree = secondaryDegree;
+        mSecondaryDegree = std::move(iSecondaryDegree);
         return *this;
     }
 

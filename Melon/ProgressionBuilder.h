@@ -13,20 +13,47 @@
 class ProgressionBuilder
 {
 public:
-    ProgressionBuilder();
-    ProgressionBuilder(int iNumberOfChords, Note iScale, Note iMode);
 
-    int     mNumberOfChords;
-    Note    mScale;
-    Mode    mMode;
+    int         mVariationAmount    = 1;
+    Note        mScale              = C;
+    Mode        mMode               = Ionian;
+    ModeType    mModeType           = NaturalMode;
 
+//=====================================================================================================================
+// CONSTRUCTORS
+//=====================================================================================================================
+
+    ProgressionBuilder()
+    {}
+
+    ProgressionBuilder(int iVariationAmount, Note iScale, Mode iMode) :
+        mVariationAmount(iVariationAmount),
+        mScale(iScale),
+        mMode(iMode)
+    {}
+
+
+//=====================================================================================================================
+// PUBLIC METHODS
+//=====================================================================================================================
+
+    // Logic generating the progression
     Progression generate();
+
 
 private:
 
-    //=====================================================================================================================
-    // BASIC HARMONIC STRUCTURAL UNIT
-    //=====================================================================================================================
+//=====================================================================================================================
+// PRIVATE METHODS
+//=====================================================================================================================
+
+    // This function will RANDOMLY attempt the available hsu variations on RANDOMLY selected chords of the progression
+    int applyVariation(Progression& oProgression, int iVariationAmount, std::vector<VARIATION_FUNCTION_POINTER> iVariationFunctions);
+
+
+//=====================================================================================================================
+// BASIC HARMONIC STRUCTURAL UNIT
+//=====================================================================================================================
     std::vector<Progression> hsuList =
     {
         // V-I
@@ -48,9 +75,9 @@ private:
         Progression({Chord(3), Chord(2), Chord(5), Chord(1)})
     };
 
-    //=====================================================================================================================
-    // GENERIC SUBSTITUTIONS AND INTERPOLATIONS LISTS
-    //=====================================================================================================================
+//=====================================================================================================================
+// GENERIC SUBSTITUTIONS AND INTERPOLATIONS LISTS
+//=====================================================================================================================
     std::vector<Progression> genericSubstitutions =
     {
         {},	// index 0 empty for readability
@@ -138,9 +165,9 @@ private:
         }
     };
 
-    //=====================================================================================================================
-    // BASIC HARMONIC STRUCTURAL UNIT VARIATIONS
-    //=====================================================================================================================
+//=====================================================================================================================
+// BASIC HARMONIC STRUCTURAL UNIT VARIATIONS
+//=====================================================================================================================
 
     // Add tonic in front of the progression
     int hsuBasicVariation_AddTonicAtBeggining(Progression& oProgression);
@@ -151,9 +178,9 @@ private:
     // Stop oProgression after V
     int hsuBasicVariation_StopProgAfterDominant(Progression& oProgression);
 
-    //=====================================================================================================================
-    // GENERIC VARIATIONS
-    //=====================================================================================================================
+//=====================================================================================================================
+// GENERIC VARIATIONS
+//=====================================================================================================================
 
     // Substitute a chord
     int hsuGenericVariation_Substitution(Progression& oProgression);
@@ -161,9 +188,9 @@ private:
     //  Insert a chord before another one
     int hsuGenericVariation_Interpolation(Progression& oProgression);
 
-    //=====================================================================================================================
-    //	ALTERATIVE VARIATIONS
-    //=====================================================================================================================
+//=====================================================================================================================
+//	ALTERATIVE VARIATIONS
+//=====================================================================================================================
 
     // Insert a secondary fifth degree on a randomly selected chord that is not a tonic or leading
     int hsuAlterativeVariation_AddSecondaryDominant(Progression& oProgression);
@@ -171,9 +198,9 @@ private:
     // Substitute a chord with a chord from another mode
     int hsuAlterativeVariation_ModalMixture(Progression& oProgression);
 
-    //=====================================================================================================================
-    // HSU VARIATION FUNCTIONS LIST
-    //=====================================================================================================================
+//=====================================================================================================================
+// HSU VARIATION FUNCTIONS LIST
+//=====================================================================================================================
 
     std::vector<VARIATION_FUNCTION_POINTER> allVariationFunctions =
     {
@@ -186,12 +213,6 @@ private:
         hsuAlterativeVariation_ModalMixture*/
     };
 
-    //=====================================================================================================================
-    // APPLY VARIATION METHOD
-    //=====================================================================================================================
-    // This function will RANDOMLY attempt the available hsu variations on RANDOMLY selected chords of the progression
-    int applyVariation(Progression& oProgression, int iVariationAmount, std::vector<VARIATION_FUNCTION_POINTER> iVariationFunctions);
-
-};
+}; // class ProgressionBuilder
 
 #endif // PROGRESSIONBUILDER_H

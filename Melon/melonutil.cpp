@@ -12,7 +12,7 @@ randomInt(int min, int max)
 }
 
 bool
-Probability(int percentageOfSuccess)
+probability(int percentageOfSuccess)
 {
     return percentageOfSuccess >= randomInt(1, 100);
 }

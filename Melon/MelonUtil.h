@@ -8,9 +8,17 @@
 #include <string>
 #include <cstdlib>
 
-int randomInt(int min, int max);
 
-bool Probability(int percentageOfSuccess);
+//=====================================================================================================================
+// UTILITIES
+//=====================================================================================================================
+
+int randomInt(int min, int max);
+bool probability(int percentageOfSuccess);
+
+//=====================================================================================================================
+// TEMPLATES
+//=====================================================================================================================
 
 template <class T>
 int randVectorIndex(std::vector<T>& iVector)
@@ -42,7 +50,5 @@ std::vector<int> generateListOfIndex(std::vector<T>& iVector)
 
     return wReturnedVector;
 }
-
-
 
 #endif // MELONUTIL_H

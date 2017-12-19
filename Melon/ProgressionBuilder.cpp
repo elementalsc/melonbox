@@ -1,12 +1,74 @@
 #include "ProgressionBuilder.h"
 
-ProgressionBuilder::ProgressionBuilder()
-{
+//=====================================================================================================================
+// GENERATE PROGRESSION
+//=====================================================================================================================
 
+Progression
+ProgressionBuilder::generate()
+{
+    Progression oProgression;
+
+    // Recuperate random Harmonic Structural Unit
+    oProgression = hsuList[randomInt(0, hsuList.size()-1)];
+
+    // Apply random variations
+    applyVariation(oProgression,mVariationAmount,allVariationFunctions);
+
+    // Apply modal mixture
+
+    // Apply mode
+    applyModeTriads(oProgression, mMode, true);
+
+    // Apply notes
+
+
+    return oProgression;
 }
 
+
+//=====================================================================================================================
+//	APPLY VARIATION
+//=====================================================================================================================
+
+// This function will RANDOMLY attempt the available hsu variations on RANDOMLY selected chords of the progression
+int
+ProgressionBuilder::applyVariation(Progression& oProgression, int iVariationAmount, std::vector<VARIATION_FUNCTION_POINTER> iVariationFunctions)
+{
+    for(int wPass = 0; wPass < iVariationAmount; ++wPass)
+    {
+        std::vector<int> wRemainingVariations = generateListOfIndex(iVariationFunctions);
+
+        int wCase;
+
+        for(int i = 0; i < iVariationFunctions.size(); ++i)
+        {
+            // among the possibilities, if one fails for incompatibility,
+            // remove it from possible inputs
+            wCase = randVectorIndex(wRemainingVariations);
+
+            if((this->*iVariationFunctions[wCase])(oProgression))
+            {
+                return VARIATION_SUCCESS;
+            }
+            else
+            {
+                removeEraseValue(wRemainingVariations,wCase);
+            }
+        }
+    }
+
+    return VARIATION_FAILURE;
+}
+
+
+//=====================================================================================================================
+// BASIC VARIATIONS
+//=====================================================================================================================
+
 // Add tonic in front of the progression
-int ProgressionBuilder::hsuBasicVariation_AddTonicAtBeggining(Progression& oProgression)
+int
+ProgressionBuilder::hsuBasicVariation_AddTonicAtBeggining(Progression& oProgression)
 {
     if(oProgression[0] != Chord(1))
     {
@@ -18,14 +80,15 @@ int ProgressionBuilder::hsuBasicVariation_AddTonicAtBeggining(Progression& oProg
 }
 
 // Substitute V-I resolution for V-(IV|VI)
-int ProgressionBuilder::hsuBasicVariation_SubstituteFiveOneResolution(Progression& oProgression)
+int
+ProgressionBuilder::hsuBasicVariation_SubstituteFiveOneResolution(Progression& oProgression)
 {
     int wProgSizeMinusOne = oProgression.size() - 1;
 
         if(oProgression[wProgSizeMinusOne] == Chord(1) &&
            oProgression[wProgSizeMinusOne] == Chord(5))
     {
-        if (Probability(50))
+        if (probability(50))
         {
                         oProgression[wProgSizeMinusOne] = Chord(4);
             return VARIATION_SUCCESS;
@@ -41,7 +104,8 @@ int ProgressionBuilder::hsuBasicVariation_SubstituteFiveOneResolution(Progressio
 }
 
 // Stop oProgression after V
-int ProgressionBuilder::hsuBasicVariation_StopProgAfterDominant(Progression& oProgression)
+int
+ProgressionBuilder::hsuBasicVariation_StopProgAfterDominant(Progression& oProgression)
 {
     // Starts iterating at one to avoid empty progression
     for(unsigned int i = 1; i < oProgression.size(); ++i)
@@ -61,7 +125,8 @@ int ProgressionBuilder::hsuBasicVariation_StopProgAfterDominant(Progression& oPr
 //=====================================================================================================================
 
 // Substitute a chord
-int ProgressionBuilder::hsuGenericVariation_Substitution(Progression& oProgression)
+int
+ProgressionBuilder::hsuGenericVariation_Substitution(Progression& oProgression)
 {
     std::vector<int> wRemainingChords = oProgression.indexList();
     int 	wProgIndex;
@@ -89,7 +154,8 @@ int ProgressionBuilder::hsuGenericVariation_Substitution(Progression& oProgressi
 }
 
 //  Insert a chord before another one
-int ProgressionBuilder::hsuGenericVariation_Interpolation(Progression& oProgression)
+int
+ProgressionBuilder::hsuGenericVariation_Interpolation(Progression& oProgression)
 {
     std::vector<int> wRemainingChords = oProgression.indexList();
     int              wProgIndex;
@@ -119,7 +185,8 @@ int ProgressionBuilder::hsuGenericVariation_Interpolation(Progression& oProgress
 //=====================================================================================================================
 
 // Insert a secondary fifth degree on a randomly selected chord that is not a tonic or leading
-int ProgressionBuilder::hsuAlterativeVariation_AddSecondaryDominant(Progression& oProgression)
+int
+ProgressionBuilder::hsuAlterativeVariation_AddSecondaryDominant(Progression& oProgression)
 {
     std::vector<int> wRemainingChords = oProgression.indexList();
     int              wProgIndex;
@@ -143,7 +210,8 @@ int ProgressionBuilder::hsuAlterativeVariation_AddSecondaryDominant(Progression&
 }
 
 // Substitute a chord with a chord from another mode
-int ProgressionBuilder::hsuAlterativeVariation_ModalMixture(Progression& oProgression)
+int
+ProgressionBuilder::hsuAlterativeVariation_ModalMixture(Progression& oProgression)
 {
 
     std::vector<int> wRemainingChordIndexes = oProgression.indexList();
@@ -172,31 +240,3 @@ int ProgressionBuilder::hsuAlterativeVariation_ModalMixture(Progression& oProgre
 }
 
 
-// This function will RANDOMLY attempt the available hsu variations on RANDOMLY selected chords of the progression
-int ProgressionBuilder::applyVariation(Progression& oProgression, int iVariationAmount, std::vector<VARIATION_FUNCTION_POINTER> iVariationFunctions)
-{
-    for(int wPass = 0; wPass < iVariationAmount; ++wPass)
-    {
-        std::vector<int> wRemainingVariations = generateListOfIndex(iVariationFunctions);
-
-        int wCase;
-
-        for(int i = 0; i < iVariationFunctions.size(); ++i)
-        {
-            // among the possibilities, if one fails for incompatibility,
-            // remove it from possible inputs
-            wCase = randVectorIndex(wRemainingVariations);
-
-            if((this->*iVariationFunctions[wCase])(oProgression))
-            {
-                return VARIATION_SUCCESS;
-            }
-            else
-            {
-                removeEraseValue(wRemainingVariations,wCase);
-            }
-        }
-    }
-
-    return VARIATION_FAILURE;
-}
