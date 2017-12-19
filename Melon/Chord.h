@@ -2,6 +2,7 @@
 #define CHORD_H
 
 #include <string>
+#include <vector>
 
 enum Note
 {
@@ -32,28 +33,6 @@ enum Triad
     MinorTriad,
     DiminishedTriad,
     AugmentedTriad
-};
-
-static Triad mNaturalTriads[7] = // Natural triads
-{
-    Triad::MajorTriad,
-    Triad::MinorTriad,
-    Triad::MinorTriad,
-    Triad::MajorTriad,
-    Triad::MajorTriad,
-    Triad::MinorTriad,
-    Triad::DiminishedTriad
-};
-
-static Triad mHarmonicTriads[7] = // Harmonic triads
-{
-    Triad::AugmentedTriad,
-    Triad::MinorTriad,
-    Triad::MajorTriad,
-    Triad::MajorTriad,
-    Triad::DiminishedTriad,
-    Triad::MinorTriad,
-    Triad::DiminishedTriad
 };
 
 enum Seventh
@@ -105,24 +84,43 @@ enum SecondaryDegree
     VII					= 7
 };
 
+static Triad mNaturalTriads[7] = // Natural triads
+{
+    Triad::MajorTriad,
+    Triad::MinorTriad,
+    Triad::MinorTriad,
+    Triad::MajorTriad,
+    Triad::MajorTriad,
+    Triad::MinorTriad,
+    Triad::DiminishedTriad
+};
 
-
+static Triad mHarmonicTriads[7] = // Harmonic triads
+{
+    Triad::AugmentedTriad,
+    Triad::MinorTriad,
+    Triad::MajorTriad,
+    Triad::MajorTriad,
+    Triad::DiminishedTriad,
+    Triad::MinorTriad,
+    Triad::DiminishedTriad
+};
 
 class Chord
 {
 
 public:
 
-    int mDegree;
-    Note            mRoot               = NoDefinedNote;
-    Note            mScale              = NoDefinedNote;
-
-    Triad           mTriad              = NoDefinedTriad;
-    Inversion       mInversion          = Root;
-    Alteration      mAlteration         = NoAlteration;
-    SuspendedDegree mSuspendedDegree	= NoSuspendedDegree;
-    AddedDegree     mAddedDegree        = NoAddedDegree;
-    SecondaryDegree mSecondaryDegree	= NoSecondaryDegree;
+    int              mDegree;
+    std::vector<int> mNotes;
+    Note             mRoot               = NoDefinedNote;
+    Note             mScale              = NoDefinedNote;
+    Triad            mTriad              = NoDefinedTriad;
+    Inversion        mInversion          = Root;
+    Alteration       mAlteration         = NoAlteration;
+    SuspendedDegree  mSuspendedDegree	 = NoSuspendedDegree;
+    AddedDegree      mAddedDegree        = NoAddedDegree;
+    SecondaryDegree  mSecondaryDegree	 = NoSecondaryDegree;
 
     virtual ~Chord() = default;
 
@@ -211,12 +209,12 @@ public:
     bool operator==(const Chord& other) const
     {
         if (
-            mDegree		== other.mDegree &&
-            mTriad		== other.mTriad &&
-            mInversion		== other.mInversion &&
-            mAlteration		== other.mAlteration &&
+            mDegree             == other.mDegree &&
+            mTriad              == other.mTriad &&
+            mInversion          == other.mInversion &&
+            mAlteration         == other.mAlteration &&
             mSuspendedDegree	== other.mSuspendedDegree &&
-            mAddedDegree	== other.mAddedDegree &&
+            mAddedDegree        == other.mAddedDegree &&
             mSecondaryDegree	== other.mSecondaryDegree
            )
         {

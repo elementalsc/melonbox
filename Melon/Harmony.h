@@ -14,7 +14,6 @@
 #define VARIATION_SUCCESS 1
 #define VARIATION_FAILURE 0
 
-Progression progression_V_I;
 
 vector<Progression> hsuList =
 {
@@ -260,26 +259,19 @@ vector<VARIATION_FUNCTION_POINTER> allVariationFunctions =
 // APPLY VARIATION TEMPLATE
 //====================================================================================================================
 
-// This function will attempt the available hsu variations on randomly selected chords of the progression
+// This function will RANDOMLY attempt the available hsu variations on RANDOMLY selected chords of the progression
 int applyVariation(Progression& oProgression, int iVariationAmount, vector<VARIATION_FUNCTION_POINTER> iVariationFunctions)
 {
     for(int wPass = 0; wPass < iVariationAmount; ++wPass)
     {
-        std::vector<int> wRemainingVariations;
-
-        // Create a vector containing a  continous list of int (0,1,2,3...) for all the variationFunctions
-        // vector possible indexes. Each attempted index will be removed from the vector, so it is not attempted
-        // more than once.
-        for(int i = 0; i < iVariationFunctions.size(); ++i)
-        {
-            wRemainingVariations.push_back(i);
-        }
+        std::vector<int> wRemainingVariations = generateListOfIndex(iVariationFunctions);
 
         int wCase;
+
         for(int i = 0; i < iVariationFunctions.size(); ++i)
         {
-            // among the 3 possibilities, if one fails for incompatibility,
-            // remove it from switch case possible inputs
+            // among the possibilities, if one fails for incompatibility,
+            // remove it from possible inputs
             wCase = randVectorIndex(wRemainingVariations);
 
             if(iVariationFunctions[wCase](oProgression))

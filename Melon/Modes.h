@@ -28,6 +28,7 @@ enum ModeType
 
 ModeType getModeType(Mode mode);
 
+
 //
 // MODE SCALE INTERVALS
 //
