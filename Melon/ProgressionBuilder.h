@@ -2,9 +2,11 @@
 #define PROGRESSIONBUILDER_H
 
 #include "Progression.h"
+#include "MelonLogger.h"
 #include "MelonUtil.h"
 
 #define melonException int
+// Method pointer to list variation functions
 #define VARIATION_FUNCTION_POINTER melonException (ProgressionBuilder::*)(Progression&)
 #define VARIATION_SUCCESS 1
 #define VARIATION_FAILURE 0
@@ -12,19 +14,22 @@
 
 class ProgressionBuilder
 {
+
 public:
 
-    int         mVariationAmount    = 1;
-    Note        mScale              = C;
-    Mode        mMode               = Ionian;
-    ModeType    mModeType           = NaturalMode;
+    int          mVariationAmount   = 1;
+    Note         mScale             = C;
+    Mode         mMode              = Ionian;
+    ModeType     mModeType          = NaturalMode;
+    MelonLogger* logger             = logger->getInstance();
 
 //=====================================================================================================================
 // CONSTRUCTORS
 //=====================================================================================================================
 
     ProgressionBuilder()
-    {}
+    {
+    }
 
     ProgressionBuilder(int iVariationAmount, Note iScale, Mode iMode) :
         mVariationAmount(iVariationAmount),

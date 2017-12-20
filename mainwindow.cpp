@@ -18,19 +18,10 @@ RootWindow::~RootWindow()
 
 void RootWindow::on_pushButton_clicked()
 {
-    /*Progression prog;
-
-    int rInt = randomInt(0, 5);
-    prog = hsuList[rInt];
-    applyVariation(prog,ui->variationNumber->value(),allVariationFunctions);
-
-    // créer ProgressionBuilder
-    //
-
+    // [ ] affichage des degreés relativement à Ionien/Aéolien (n'importe quel mode idéalement!)
+    // [ ] affichage des noms des accords
     // [ ] faire un tableau donnant l'historique de la création de la progression
-    // [ ] donne la progression en degrés, puis en accords
     // [/] faire un logger qui est un singleton
- */
 
     ProgressionBuilder progBuilder;
     ui->oProgDisplay->append(QString::fromStdString(progBuilder.generate().toString()));
