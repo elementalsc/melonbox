@@ -1,6 +1,7 @@
 #include "Modes.h"
 #include "Chord.h"
 #include "Progression.h"
+#include "MelonLogger.h"
 
 /* useless?
 ModeType
@@ -85,4 +86,7 @@ applyModeTriads(Progression& oProgression, Mode iMode, bool iNaturalOrHarmonic)
     {
         oProgression[i].mTriad = mNaturalTriads[((oProgression[i].mDegree - 1) + (iMode - 1)) % 7];
     }
+
+    MelonLogger* logger = logger->getInstance();
+    logger->getInstance()->logProgression(oProgression, "Modes applied : ");
 }

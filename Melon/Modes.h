@@ -71,10 +71,10 @@ static const NoteVector locrianPosition		= { NULL,0,1,3,5,6,8,10 };
 //	METHODS
 //=====================================================================================================================
 
-void applyModeTriads(Progression& oProgression, Mode iMode, bool iNaturalOrHarmonic = true);
-ModeType getModeType(Mode mode);
-int Invervals(Mode mode, int degree);
-int NextTriad(Mode mode, int degree);
-int Position(Mode mode, int degree);
+void        applyModeTriads(Progression& oProgression, Mode iMode, bool iNaturalOrHarmonic = true);
+int         Invervals(Mode mode, int degree);
+int         NextTriad(Mode mode, int degree);
+int         Position(Mode mode, int degree);
+ModeType    getModeType(Mode mode);
 
 #endif // MODES_H

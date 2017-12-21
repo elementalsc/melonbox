@@ -3,10 +3,16 @@
 
 #include <iostream>
 #include <fstream>
+#include <sstream>
 #include <string>
 #include <iomanip>
 #include <ctime>
 #include <chrono>
+
+#include <sys/time.h>
+#include <time.h>
+#include <stdlib.h>
+#include <stdio.h>
 
 enum LogLevel
 {
@@ -17,13 +23,9 @@ enum LogLevel
     Fatal       = 4
 };
 
-struct LogEntry
-{
-    time_t      mTimestamp;
-    LogLevel    mLogLevel;
-    std::string      mLogMessage;
-};
+class Progression;
 
+// Singleton logger class
 class MelonLogger
 {
 private:
@@ -31,16 +33,28 @@ private:
     static MelonLogger* mInstance;
     std::ofstream mLogFile;
     std::string printLogLevel(LogLevel iLogLevel);
+    std::string timestamp();
+    bool mLoggingEnabled = true;
     MelonLogger();
     ~MelonLogger();
-
 
 public:
 
     static MelonLogger* getInstance();
     MelonLogger(MelonLogger const&)     = delete;
     void operator=(MelonLogger const&)  = delete;
+
+//=====================================================================================================================
+// LOGGING FUNCTIONS
+//=====================================================================================================================
+
+    // Generic logging
     void log(std::string iLogString, LogLevel iLogLevel = Info);
+
+    // Progression logging
+    void logProgression(Progression& iProgression, std::string iPrefix = "");
+
+
 
 }; // class MelonLogger
 

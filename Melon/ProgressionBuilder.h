@@ -11,13 +11,12 @@
 #define VARIATION_SUCCESS 1
 #define VARIATION_FAILURE 0
 
-
 class ProgressionBuilder
 {
 
 public:
 
-    int          mVariationAmount   = 1;
+    int          mVariationAmount   = 3;
     Note         mScale             = C;
     Mode         mMode              = Ionian;
     ModeType     mModeType          = NaturalMode;
@@ -28,8 +27,7 @@ public:
 //=====================================================================================================================
 
     ProgressionBuilder()
-    {
-    }
+    {}
 
     ProgressionBuilder(int iVariationAmount, Note iScale, Mode iMode) :
         mVariationAmount(iVariationAmount),
@@ -44,7 +42,6 @@ public:
 
     // Logic generating the progression
     Progression generate();
-
 
 private:
 

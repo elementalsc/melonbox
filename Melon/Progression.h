@@ -8,11 +8,13 @@
 
 class Progression
 {
-public:
+private:
 
     std::vector<Chord>  mChords = {};
     Note                mScale  = NoDefinedNote;
     Mode                mMode   = NoDefinedMode;
+
+public:
 
 //=====================================================================================================================
 // CONSTRUCTORS
@@ -56,6 +58,21 @@ public:
 //=====================================================================================================================
 // PUBLIC METHODS
 //=====================================================================================================================
+
+    std::vector<Chord>& getChords()
+    {
+        return mChords;
+    }
+
+    Note& getScale()
+    {
+        return mScale;
+    }
+
+    Mode& getMode()
+    {
+        return mMode;
+    }
 
     // Returns vector of "remaning chords" ({0,1,2,3}) for Harmony.h use
     std::vector<int> indexList();

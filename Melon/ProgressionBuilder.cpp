@@ -14,6 +14,7 @@ ProgressionBuilder::generate()
 
     // Recuperate random Harmonic Structural Unit
     oProgression = hsuList[randomInt(0, hsuList.size()-1)];
+    logger->logProgression(oProgression, "Basic HSU : ");
 
     // Apply random variations
     applyVariation(oProgression,mVariationAmount,allVariationFunctions);
@@ -53,6 +54,7 @@ ProgressionBuilder::applyVariation(Progression& oProgression, int iVariationAmou
             if((this->*iVariationFunctions[wCase])(oProgression))
             {
                 return VARIATION_SUCCESS;
+                logger->logProgression(oProgression, "Variation : ");
             }
             else
             {
@@ -61,6 +63,7 @@ ProgressionBuilder::applyVariation(Progression& oProgression, int iVariationAmou
         }
     }
 
+    logger->log("Variation failure", Warning);
     return VARIATION_FAILURE;
 }
 
@@ -144,7 +147,7 @@ ProgressionBuilder::hsuGenericVariation_Substitution(Progression& oProgression)
         {
             oProgression[wProgIndex] =                                                           // Assign new degree value at index...
                     genericSubstitutions[wTargetChordDegree]                      // ...in this degree's possible substitutions
-                    [randVectorIndex(genericSubstitutions[wTargetChordDegree].mChords)];  // ...a random possibile substitute
+                    [randVectorIndex(genericSubstitutions[wTargetChordDegree].getChords())];  // ...a random possibile substitute
             return VARIATION_SUCCESS;
         }
         else
@@ -171,7 +174,7 @@ ProgressionBuilder::hsuGenericVariation_Interpolation(Progression& oProgression)
         // If the targeted degree has available interpolations
         if(genericInterpolations[wTargetChordDegree].size())
         {
-            oProgression.insertChord(genericInterpolations[wTargetChordDegree][randVectorIndex(genericInterpolations[wTargetChordDegree].mChords)],wProgIndex);
+            oProgression.insertChord(genericInterpolations[wTargetChordDegree][randVectorIndex(genericInterpolations[wTargetChordDegree].getChords())],wProgIndex);
             return VARIATION_SUCCESS;
         }
         else
