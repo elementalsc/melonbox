@@ -12,9 +12,11 @@ ProgressionBuilder::generate()
 {
     Progression oProgression;
 
+    logger->log("Generating progression... ------------------------------------------------");
+
     // Recuperate random Harmonic Structural Unit
     oProgression = hsuList[randomInt(0, hsuList.size()-1)];
-    logger->logProgression(oProgression, "Basic HSU : ");
+    logger->logProgression(oProgression, "Basic HSU\t");
 
     // Apply random variations
     applyVariation(oProgression,mVariationAmount,allVariationFunctions);
@@ -22,11 +24,11 @@ ProgressionBuilder::generate()
     // Apply modal mixture
 
     // Apply mode
-    applyModeTriads(oProgression, mMode, true);
+    applyModeTriads(oProgression, mMode, NaturalMode);
 
     // Apply notes
 
-
+    //logger->log("--------------------------------------------------------------------------\n");
     return oProgression;
 }
 
@@ -54,7 +56,6 @@ ProgressionBuilder::applyVariation(Progression& oProgression, int iVariationAmou
             if((this->*iVariationFunctions[wCase])(oProgression))
             {
                 return VARIATION_SUCCESS;
-                logger->logProgression(oProgression, "Variation : ");
             }
             else
             {
@@ -79,6 +80,7 @@ ProgressionBuilder::hsuBasicVariation_AddTonicAtBeggining(Progression& oProgress
     if(oProgression[0] != Chord(1))
     {
         oProgression.insertChord(Chord(1),0);
+        logger->logProgression(oProgression, "Added tonic at beginning : ");
         return VARIATION_SUCCESS;
     }
 
@@ -96,12 +98,15 @@ ProgressionBuilder::hsuBasicVariation_SubstituteFiveOneResolution(Progression& o
     {
         if (probability(50))
         {
-                        oProgression[wProgSizeMinusOne] = Chord(4);
+            oProgression[wProgSizeMinusOne] = Chord(4);
+
+            logger->logProgression(oProgression, "Substituted V-I for IV-I : ");
             return VARIATION_SUCCESS;
         }
         else
         {
-                        oProgression[wProgSizeMinusOne] = Chord(6);
+            oProgression[wProgSizeMinusOne] = Chord(6);
+            logger->logProgression(oProgression, "Substituted V-I for VI-I : ");
             return VARIATION_SUCCESS;
         }
     }
@@ -109,7 +114,7 @@ ProgressionBuilder::hsuBasicVariation_SubstituteFiveOneResolution(Progression& o
     return VARIATION_FAILURE;
 }
 
-// Stop oProgression after V
+// Stop progression after V
 int
 ProgressionBuilder::hsuBasicVariation_StopProgAfterDominant(Progression& oProgression)
 {
@@ -119,6 +124,7 @@ ProgressionBuilder::hsuBasicVariation_StopProgAfterDominant(Progression& oProgre
         if(oProgression[i] == Chord(5))
         {
             oProgression.removeChord(++i);
+            logger->logProgression(oProgression, "Ended progression after V : ");
             return VARIATION_SUCCESS;
         }
     }
@@ -148,6 +154,8 @@ ProgressionBuilder::hsuGenericVariation_Substitution(Progression& oProgression)
             oProgression[wProgIndex] =                                                           // Assign new degree value at index...
                     genericSubstitutions[wTargetChordDegree]                      // ...in this degree's possible substitutions
                     [randVectorIndex(genericSubstitutions[wTargetChordDegree].getChords())];  // ...a random possibile substitute
+
+            logger->logProgression(oProgression, "Substituted a chord : ");
             return VARIATION_SUCCESS;
         }
         else
@@ -175,6 +183,8 @@ ProgressionBuilder::hsuGenericVariation_Interpolation(Progression& oProgression)
         if(genericInterpolations[wTargetChordDegree].size())
         {
             oProgression.insertChord(genericInterpolations[wTargetChordDegree][randVectorIndex(genericInterpolations[wTargetChordDegree].getChords())],wProgIndex);
+
+            logger->logProgression(oProgression, "Inserted chord by interpolation : ");
             return VARIATION_SUCCESS;
         }
         else
@@ -208,6 +218,9 @@ ProgressionBuilder::hsuAlterativeVariation_AddSecondaryDominant(Progression& oPr
             if((wProgIndex > 0 && oProgression[wProgIndex - 1].mSecondaryDegree == NoSecondaryDegree))
             {
                 oProgression.insertChord(Chord(oProgression[wProgIndex].mDegree).SecondaryDegree(SecondaryDegree::V),wProgIndex);
+
+                logger->logProgression(oProgression, "Inserted secondary fifth : ");
+                return VARIATION_SUCCESS;
             }
         }
     }

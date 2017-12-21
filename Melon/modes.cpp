@@ -1,32 +1,5 @@
 #include "Modes.h"
-#include "Chord.h"
 #include "Progression.h"
-#include "MelonLogger.h"
-
-/* useless?
-ModeType
-getModeType(Mode mode)
-{
-    switch (mode)
-    {
-    case 1:
-    case 4:
-    case 5:
-        return ModeType::MajorMode; break;
-
-    case 2:
-    case 3:
-    case 6:
-        return ModeType::MinorMode; break;
-
-    case 7:
-        return ModeType::DiminishedMode; break;
-
-    default:
-        return ModeType::NoDefinedModeType; break;
-    }
-}
-*/
 
 int
 Intervals(Mode mode, int degree)
@@ -76,17 +49,68 @@ Position(Mode mode, int degree)
     }
 }
 
-//
+//=====================================================================================================================
 //	INSERTING MODE CHORDS
-//
-void
-applyModeTriads(Progression& oProgression, Mode iMode, bool iNaturalOrHarmonic)
+//=====================================================================================================================
+int
+applyModeTriads(Progression& oProgression, Mode iMode = Ionian, ModeType iModeType = NaturalMode)
 {
+    MelonLogger* logger = logger->getInstance();
+
     for(int i = 0; i < oProgression.size(); ++i)
     {
-        oProgression[i].mTriad = mNaturalTriads[((oProgression[i].mDegree - 1) + (iMode - 1)) % 7];
+        switch(iModeType)
+        {
+        case NaturalMode :
+            oProgression[i].mTriad = mNaturalTriads[((oProgression[i].mDegree - 1) + (iMode - 1)) % 7];
+            logger->getInstance()->logProgression(oProgression, "Modes applied : ");
+            return SUCCESS;
+            break;
+        case HarmonicMode :
+            oProgression[i].mTriad = mHarmonicTriads[((oProgression[i].mDegree - 1) + (iMode - 1)) % 7];
+            logger->getInstance()->logProgression(oProgression, "Modes applied : ");
+            return SUCCESS;
+            break;
+        default:
+            logger->getInstance()->log("Failed to apply mode");
+            return FAILURE;
+            break;
+        }
+    }
+    logger->getInstance()->log("Failed to apply mode");
+    return FAILURE;
+}
+
+//=====================================================================================================================
+//	CALCULATE MODE INTERVAL
+//=====================================================================================================================
+int
+calculateModeDegreeInterval(int iDegree, Mode iMode = Ionian, ModeType iModeType = NaturalMode)
+{
+    int oIntervalValue = 0;
+
+    // Natural Ionian intervals vector
+    std::vector<int> wBaseIntervalVector  = { 2,2,1,2,2,2,1 };
+
+    if(iModeType == HarmonicMode)
+    {
+        // Adjust vector from natural to harmonic interval
+        wBaseIntervalVector[3] += 1;
+        wBaseIntervalVector[4] -= 1;
     }
 
-    MelonLogger* logger = logger->getInstance();
-    logger->getInstance()->logProgression(oProgression, "Modes applied : ");
+    // Cycle wBaseIntervalVector according to iMode to have good root-degree interval for asked mode
+    std::vector<int> wOutputIntervalVector;
+    for(int i = 0; i < 7; ++i)
+    {
+        wOutputIntervalVector.push_back(wBaseIntervalVector[ (i + iMode - 1) % 7 ]);
+    }
+
+    for(int i = 0; (i+1) < iDegree; ++i)
+    {
+        oIntervalValue += wOutputIntervalVector[i];
+    }
+
+    return oIntervalValue;
 }
+

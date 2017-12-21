@@ -1,13 +1,18 @@
 #include "MelonUtil.h"
 #include "Chord.h"
 
-using namespace std;
-
-
-string
+std::string
 Chord::toString()
 {
-    string oString;
+    std::string oString;
+
+    switch (mSecondaryDegree)
+    {
+    case IV:    oString.append("IV/");   break;
+    case V:     oString.append("V/");    break;
+    case VII:   oString.append("VII/");  break;
+    default: break;
+    }
 
     switch (mDegree)
     {
@@ -73,13 +78,21 @@ Chord::toString()
 
     }
 
-    switch (mSecondaryDegree)
-    {
-    case IV:    oString.insert(0, "IV/");   break;
-    case V:     oString.insert(0, "V/");    break;
-    case VII:   oString.insert(0, "VII/");  break;
-    default: break;
-    }
+    return oString;
+}
+
+std::string
+Chord::printChord(Mode iMode, ModeType iModeType)
+{
+    std::string oString;
+
+    int wIntervalFromRoot = calculateModeDegreeInterval(mDegree, iMode, iModeType);
+    // prendre root
+    //mScale
+    // additionner le degré selon l'intervalle
+        // selon le mode, déterminer combien ajouter
+    // additionner ou soustraire selon altération
+    // additionner 5(IV), 7(V) ou 11(VII) si c'est un degré secondaire
 
     return oString;
 }

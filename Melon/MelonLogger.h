@@ -49,7 +49,7 @@ public:
 //=====================================================================================================================
 
     // Generic logging
-    void log(std::string iLogString, LogLevel iLogLevel = Info);
+    void log(std::string iLogString, LogLevel iLogLevel = Trace);
 
     // Progression logging
     void logProgression(Progression& iProgression, std::string iPrefix = "");

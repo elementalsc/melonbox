@@ -18,7 +18,6 @@ MelonLogger::MelonLogger()
 {
     //mLogFile.open("MelonLog.txt", std::ofstream::out | std::ofstream::app);
     mLogFile.open("MelonLog.txt");
-    mLogFile << "==============================================================\n\n==============================================================\n";
 }
 
 MelonLogger::~MelonLogger()
@@ -54,7 +53,6 @@ std::string MelonLogger::timestamp()
     ss << std::put_time(std::localtime(&in_time_t), "%Y-%m-%d %X");
     return ss.str();
 
-
 /*
     char buffer[30];
     struct timeval tv;
@@ -74,8 +72,6 @@ std::string MelonLogger::timestamp()
     //return static_cast<std::string>(buffer);
 */
 
-
-
 }
 
 void
@@ -88,9 +84,9 @@ MelonLogger::log(std::string iLogString, LogLevel iLogLevel)
 
         //mLogFile << std::put_time(std::localtime(&now), "%F %T")
         mLogFile << timestamp()
-                 << "\t"
+                 << " "
                  << printLogLevel(iLogLevel)
-                 << "\t"
+                 << " "
                  << iLogString
                  << std::endl;
     }
@@ -106,6 +102,6 @@ MelonLogger::logProgression(Progression& iProgression, std::string iPrefix)
         wLogMessage.append(" ");
         wLogMessage.append(iProgression.toString());
 
-        log(wLogMessage,Info);
+        log(wLogMessage,Trace);
     }
 }

@@ -4,6 +4,8 @@
 #include <string>
 #include <vector>
 
+#include "Modes.h"
+
 enum Note
 {
     NoDefinedNote = 0,
@@ -243,7 +245,8 @@ public:
 //=====================================================================================================================
 
     std::string toString();
-
+    std::string printDegree(Mode iRelativeMode, ModeType iModeType);
+    std::string printChord(Mode iMode, ModeType iModeType);
 
 }; // class Chord
 

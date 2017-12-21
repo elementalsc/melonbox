@@ -3,10 +3,12 @@
 
 #include <vector>
 #include <iostream>
+#include "MelonLogger.h"
 
-class Chord;
-class Progression;
 typedef std::vector<int> NoteVector;
+
+#define SUCCESS 1
+#define FAILURE 0
 
 enum Mode
 {
@@ -23,11 +25,8 @@ enum Mode
 enum ModeType
 {
     NoDefinedModeType   = 0,
-    MajorMode           = 1,
-    MinorMode           = 2,
-    DiminishedMode      = 3,
-    NaturalMode         = 4,
-    HarmonicMode        = 5
+    NaturalMode         = 1,
+    HarmonicMode        = 2
 };
 
         //=========================//
@@ -71,10 +70,13 @@ static const NoteVector locrianPosition		= { NULL,0,1,3,5,6,8,10 };
 //	METHODS
 //=====================================================================================================================
 
-void        applyModeTriads(Progression& oProgression, Mode iMode, bool iNaturalOrHarmonic = true);
+// Useless???????
 int         Invervals(Mode mode, int degree);
 int         NextTriad(Mode mode, int degree);
 int         Position(Mode mode, int degree);
-ModeType    getModeType(Mode mode);
+// ??????????????
+
+int applyModeTriads(Progression& oProgression, Mode iMode, ModeType iModeType);
+int calculateModeDegreeInterval(int iDegree, Mode iMode, ModeType iModeType);
 
 #endif // MODES_H
