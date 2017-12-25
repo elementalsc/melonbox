@@ -16,3 +16,5 @@ probability(int percentageOfSuccess)
 {
     return percentageOfSuccess >= randomInt(1, 100);
 }
+
+

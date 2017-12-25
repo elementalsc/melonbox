@@ -50,11 +50,13 @@ Chord::toString()
 
     switch (mSuspendedDegree)
     {
+    // TODO :Not managed yet
     default: break;
     }
 
     switch (mAddedDegree)
     {
+    // TODO :Not managed yet
     default: break;
     }
 
@@ -82,17 +84,207 @@ Chord::toString()
 }
 
 std::string
-Chord::printChord(Mode iMode, ModeType iModeType)
+Chord::printChord(Mode iMode, ModeType iModeType, Note iScale)
 {
     std::string oString;
+    Mode        wMode       = iMode;
+    ModeType    wModeType   = iModeType;
+    Note        wScale      = iScale;
 
-    int wIntervalFromRoot = calculateModeDegreeInterval(mDegree, iMode, iModeType);
-    // prendre root
-    //mScale
-    // additionner le degré selon l'intervalle
-        // selon le mode, déterminer combien ajouter
-    // additionner ou soustraire selon altération
-    // additionner 5(IV), 7(V) ou 11(VII) si c'est un degré secondaire
+    // Validating input and member variable
+    if(iMode == NoDefinedMode)
+    {
+        if(mMode == NoDefinedMode)
+        {
+            wMode = Ionian;
+            logger->log("No chord mode specified, Ionian mode assumed", Warning);
+        }
+        else
+        {
+            wMode = mMode;
+        }
+    }
+
+    if(iModeType == NoDefinedModeType)
+    {
+        if(mModeType == NoDefinedModeType)
+        {
+            wModeType = NaturalMode;
+            logger->log("No chord mode type specified, Natural mode type assumed", Warning);
+        }
+        else
+        {
+            wModeType = mModeType;
+        }
+    }
+
+    if(iScale == NoDefinedNote)
+    {
+        if(mScale == NoDefinedNote)
+        {
+            wScale = C;
+            logger->log("No chord root specified, C assumed", Warning);
+        }
+        else
+        {
+            wScale = iScale;
+        }
+    }
+
+    if(!mDegree)
+    {
+        logger->log("Chord has no specified degree", Error);
+        return "";
+    }
+
+    int wNoteValue;
+    Alteration wSharpOrFlat = calculateSharpOrFlat(wScale, wMode, wModeType);
+
+    // Getting count of semitones separating note from scale root
+    int wIntervalFromRoot = calculateModeDegreeInterval(mDegree, wMode, wModeType);
+
+    // Preparing secondary degree added interval value
+    switch(mSecondaryDegree)
+    {
+    case  IV: wNoteValue = 5;  break;
+    case   V: wNoteValue = 7;  break;
+    case VII: wNoteValue = 11; break;
+    default : break;
+    }
+
+    // Converting result between 0 and 11
+    wNoteValue += (wScale + wIntervalFromRoot + mAlteration) % 12;
+
+    oString.append(intToNote(wNoteValue,wSharpOrFlat));
+
+    switch (mTriad)
+    {
+    case MinorTriad:
+        oString.append("m");
+        break;
+
+    case AugmentedTriad:
+        oString.append("+");
+        break;
+
+    case DiminishedTriad:
+        oString.append("°");
+        break;
+
+    default: break;
+    }
+
+    switch (mSuspendedDegree)
+    {
+    case Sus2: oString.append("sus2"); break;
+    case Sus4: oString.append("sus4"); break;
+    default: break;
+    }
+
+    switch (mAddedDegree)
+    {
+    // TODO :Not managed yet
+    default: break;
+    }
+
+
+    switch(mInversion)
+    {
+    case (First | Six):
+        oString.append("/");
+        if((mTriad == MinorTriad) | (mTriad == DiminishedTriad))
+        {
+            oString.append(intToNote(wNoteValue + 3, wSharpOrFlat));
+        }
+        else
+        {
+            oString.append(intToNote(wNoteValue + 4, wSharpOrFlat));
+        }
+        break;
+
+    case (Second | SixFour):
+        oString.append("/");
+        oString.append(intToNote(wNoteValue + 7, wSharpOrFlat));
+        break;
+
+    case Third:
+        // TODO :Not managed yet
+        break;
+
+    default: break;
+    }
 
     return oString;
+}
+
+
+std::string
+Chord::intToNote(int iNoteValue, Alteration sharpOrFlat)
+{
+    switch(iNoteValue % 12)
+    {
+    case  C         :    return "C";
+    case (Cs | Db)  :    return sharpOrFlat ? "C#" : "Db";
+    case  D         :    return "D";
+    case (Ds | Eb)  :    return sharpOrFlat ? "D#" : "Eb";
+    case  E         :    return "E";
+    case  F         :    return "F";
+    case (Fs | Gb)  :    return sharpOrFlat ? "F#" : "Gb";
+    case  G         :    return "G";
+    case (Gs | Ab)  :    return sharpOrFlat ? "G#" : "Ab";
+    case  A         :    return "A";
+    case (As | Bb)  :    return sharpOrFlat ? "A#" : "Bb";
+    case  B         :    return "B";
+    default:
+        logger->log("No valid note passed to intToNote()",Error);
+        return "";
+    }
+}
+
+Alteration
+Chord::calculateSharpOrFlat(Note iScale, Mode iMode, ModeType iModeType)
+{
+    switch(calculateEquivalentIonianRoot(iScale, iMode, iModeType))
+    {
+    case C :
+    case G :
+    case D :
+    case A :
+    case E :
+    case B :
+    case (Fs | Gb) :
+        return Sharp;
+
+    case F :
+    case Bb :
+    case Eb :
+    case Ab :
+    case Db :
+        return Flat;
+
+    default :
+        logger->log("Unable to calculate Sharp or Flat representation", Error);
+        return NoAlteration;
+    }
+}
+
+Note
+Chord::calculateEquivalentIonianRoot(Note iScale, Mode iMode, ModeType iModeType)
+{
+    int wIonianNoteDistance = 0;
+
+    // Natural Ionian intervals vector
+    std::vector<int> wBaseIntervalVector  = { 2,2,1,2,2,2,1 };
+
+    if(iModeType == HarmonicMode)
+    {
+        // Adjust vector from natural to harmonic interval
+        wBaseIntervalVector[3] += 1;
+        wBaseIntervalVector[4] -= 1;
+    }
+
+    // Sum remaining intervals to establish distance from relative Ionian root note
+    std::accumulate(wBaseIntervalVector.begin() + wBaseIntervalVector[iMode - 1], wBaseIntervalVector.end(), wIonianNoteDistance);
+
+    return static_cast<Note>((iScale + wIonianNoteDistance) % 12);
 }

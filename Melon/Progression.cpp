@@ -41,6 +41,20 @@ std::string Progression::toString()
     return oString.substr(0, oString.size() - 3);
 }
 
+
+std::string Progression::printChords(Alteration sharpOrFlat)
+{
+    std::string oString;
+
+    for (Chord chord : mChords)
+    {
+        oString.append(chord.printChord());
+        oString.append(" - ");
+    }
+
+    return oString.substr(0, oString.size() - 3);
+}
+
 std::vector<int> Progression::indexList()
 {
     std::vector<int> wReturnedVector;

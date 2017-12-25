@@ -8,24 +8,24 @@
 
 enum Note
 {
-    NoDefinedNote = 0,
-    C   = 1,
-    Cs  = 2,
-    Db  = 2,
-    D   = 3,
-    Ds  = 4,
-    Eb  = 4,
-    E   = 5,
-    F   = 6,
-    Fs  = 7,
-    Gb  = 7,
-    G   = 8,
-    Gs  = 9,
-    Ab  = 9,
-    A   = 10,
-    As  = 11,
-    Bb  = 11,
-    B   = 12
+    NoDefinedNote = -1,
+    C   = 0,
+    Cs  = 1,
+    Db  = 1,
+    D   = 2,
+    Ds  = 3,
+    Eb  = 3,
+    E   = 4,
+    F   = 5,
+    Fs  = 6,
+    Gb  = 6,
+    G   = 7,
+    Gs  = 8,
+    Ab  = 8,
+    A   = 9,
+    As  = 10,
+    Bb  = 10,
+    B   = 11
 };
 
 enum Triad
@@ -117,12 +117,15 @@ public:
     std::vector<int> mNotes              = {};
     Note             mRoot               = NoDefinedNote;
     Note             mScale              = NoDefinedNote;
+    Mode             mMode               = NoDefinedMode;
+    ModeType         mModeType           = NoDefinedModeType;
     Triad            mTriad              = NoDefinedTriad;
     Inversion        mInversion          = Root;
     Alteration       mAlteration         = NoAlteration;
     SuspendedDegree  mSuspendedDegree	 = NoSuspendedDegree;
     AddedDegree      mAddedDegree        = NoAddedDegree;
     SecondaryDegree  mSecondaryDegree	 = NoSecondaryDegree;
+    MelonLogger*     logger              = logger->getInstance();
 
     virtual ~Chord() = default;
 
@@ -169,36 +172,36 @@ public:
 //	FLUENT SETTERS
 //=====================================================================================================================
 
-    Chord& Triad(Triad&& iTriad)
+    Chord& setTriad(Triad&& iTriad)
     {
         mTriad = std::move(iTriad);
         return *this;
     }
 
-    Chord& Inversion(Inversion&& iInversion)
+    Chord& setInversion(Inversion&& iInversion)
     {
         mInversion = std::move(iInversion);
         return *this;
     }
 
-    Chord& Alteration(Alteration&& iAlteration)
+    Chord& setAlteration(Alteration&& iAlteration)
     {
         mAlteration = std::move(iAlteration);
         return *this;
     }
 
-    Chord& Add(AddedDegree&& iAddedDegree)
+    Chord& setAdd(AddedDegree&& iAddedDegree)
     {
         mAddedDegree = std::move(iAddedDegree);
         return *this;
     }
 
-    Chord& Sus(SuspendedDegree&& iSuspendedDegree)
+    Chord& setSus(SuspendedDegree&& iSuspendedDegree)
     {
         mSuspendedDegree = std::move(iSuspendedDegree);
         return *this;
     }
-    Chord& SecondaryDegree(SecondaryDegree&& iSecondaryDegree)
+    Chord& setSecondaryDegree(SecondaryDegree&& iSecondaryDegree)
     {
         mSecondaryDegree = std::move(iSecondaryDegree);
         return *this;
@@ -245,8 +248,17 @@ public:
 //=====================================================================================================================
 
     std::string toString();
-    std::string printDegree(Mode iRelativeMode, ModeType iModeType);
-    std::string printChord(Mode iMode, ModeType iModeType);
+    std::string printDegree(Mode iRelativeMode = Ionian, ModeType iModeType = NaturalMode);
+    Alteration calculateSharpOrFlat(Note iScale, Mode iMode, ModeType iModeType);
+    Note calculateEquivalentIonianRoot(Note iScale, Mode iMode, ModeType iModeType);
+    // PRINTING METHODS
+
+    // All defaults values to NoDefinedX to use Chord members value a priori
+    std::string printChord(Mode iMode = NoDefinedMode, ModeType iModeType = NoDefinedModeType, Note iScale = NoDefinedNote);
+
+    // Take and int value and return note string according to MIDI reference (0/12/24/26/48/60/...  = C)
+    // Do not return octave number
+    std::string intToNote(int iNoteValue, Alteration sharpOrFlat = Sharp);
 
 }; // class Chord
 

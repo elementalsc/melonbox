@@ -50,4 +50,5 @@ DISTFILES += \
 
 QMAKE_CXXFLAGS += -Wno-sign-compare \
                   -Wno-unused-variable \
+                  -Wno-unused-but-set-variable \
                   -Wno-unused-parameter \

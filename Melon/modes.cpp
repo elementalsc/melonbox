@@ -114,3 +114,5 @@ calculateModeDegreeInterval(int iDegree, Mode iMode = Ionian, ModeType iModeType
     return oIntervalValue;
 }
 
+
+

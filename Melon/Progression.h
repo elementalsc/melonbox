@@ -77,8 +77,12 @@ public:
     // Returns vector of "remaning chords" ({0,1,2,3}) for Harmony.h use
     std::vector<int> indexList();
 
+    // PRINTING METHODS
+
     // toString
     std::string toString();
+
+    std::string printChords(Alteration sharpOrFlat = Sharp);
 
 }; // class Progression
 

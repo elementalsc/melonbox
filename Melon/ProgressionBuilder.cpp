@@ -217,7 +217,7 @@ ProgressionBuilder::hsuAlterativeVariation_AddSecondaryDominant(Progression& oPr
             // If the previous chord is not a secondary degree, or if it's the first of the progression
             if((wProgIndex > 0 && oProgression[wProgIndex - 1].mSecondaryDegree == NoSecondaryDegree))
             {
-                oProgression.insertChord(Chord(oProgression[wProgIndex].mDegree).SecondaryDegree(SecondaryDegree::V),wProgIndex);
+                oProgression.insertChord(Chord(oProgression[wProgIndex].mDegree).setSecondaryDegree(SecondaryDegree::V),wProgIndex);
 
                 logger->logProgression(oProgression, "Inserted secondary fifth : ");
                 return VARIATION_SUCCESS;
