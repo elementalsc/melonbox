@@ -1,18 +1,5 @@
 #include "Progression.h"
 
-//=====================================================================================================================
-// OPERATORS
-//=====================================================================================================================
-
-Chord& Progression::operator[](int iIndex)
-{
-    return mChords[iIndex];
-}
-
-//=====================================================================================================================
-// METHODS
-//=====================================================================================================================
-
 int Progression::size()
 {
     return mChords.size();
@@ -25,6 +12,9 @@ void Progression::removeChord(int wIndex)
 
 void Progression::insertChord(Chord iChord, int wIndex)
 {
+    iChord.setMode(mMode);
+    iChord.setModeType(mModeType);
+    iChord.setScale(mScale);
     mChords.insert(mChords.begin() + wIndex, iChord);
 }
 
@@ -48,7 +38,7 @@ std::string Progression::printChords(Alteration sharpOrFlat)
 
     for (Chord chord : mChords)
     {
-        oString.append(chord.printChord());
+        oString.append(chord.printChord(mMode, mModeType, mScale));
         oString.append(" - ");
     }
 
@@ -65,4 +55,12 @@ std::vector<int> Progression::indexList()
     }
 
     return wReturnedVector;
+}
+
+void Progression::refreshChordsModeAndScale()
+{
+    for(int i = 0; i < mChords.size(); ++i)
+    {
+        mChords[i].setMode(mMode).setModeType(mModeType).setScale(mScale);
+    }
 }

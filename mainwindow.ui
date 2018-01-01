@@ -105,7 +105,7 @@
      </property>
     </item>
    </widget>
-   <widget class="QListWidget" name="uMode">
+   <widget class="QListWidget" name="uModeList">
     <property name="geometry">
      <rect>
       <x>370</x>
@@ -190,7 +190,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QSpinBox" name="variationNumber"/>
+        <widget class="QSpinBox" name="uVariationNumber"/>
        </item>
       </layout>
      </item>
@@ -199,7 +199,7 @@
    <zorder>oProgDisplay</zorder>
    <zorder>layoutWidget</zorder>
    <zorder>uScaleList</zorder>
-   <zorder>uMode</zorder>
+   <zorder>uModeList</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">

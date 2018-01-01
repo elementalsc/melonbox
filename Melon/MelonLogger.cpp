@@ -52,26 +52,6 @@ std::string MelonLogger::timestamp()
     std::stringstream ss;
     ss << std::put_time(std::localtime(&in_time_t), "%Y-%m-%d %X");
     return ss.str();
-
-/*
-    char buffer[30];
-    struct timeval tv;
-
-    time_t curtime;
-
-    gettimeofday(&tv, NULL);
-    curtime=tv.tv_sec;
-
-    strftime(buffer,30,"%m-%d-%Y  %T.",localtime(&curtime));
-    printf("%s%ld",buffer,tv.tv_usec);
-
-    std::string oString = static_cast<std::string>(buffer) + " " + std::to_string(tv.tv_sec);
-
-    return oString;
-    //return std::to_string(buffer);// + " " + std::to_string(tv.tv_sec);
-    //return static_cast<std::string>(buffer);
-*/
-
 }
 
 void

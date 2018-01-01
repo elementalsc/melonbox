@@ -10,9 +10,16 @@ class Progression
 {
 private:
 
-    std::vector<Chord>  mChords = {};
-    Note                mScale  = NoDefinedNote;
-    Mode                mMode   = NoDefinedMode;
+    std::vector<Chord>  mChords     = {};
+    Note                mScale      = NoDefinedNote;
+    Mode                mMode       = NoDefinedMode;
+    ModeType            mModeType   = NoDefinedModeType;
+
+//=====================================================================================================================
+// PRIVATE METHODS
+//=====================================================================================================================
+
+    void refreshChordsModeAndScale();
 
 public:
 
@@ -23,30 +30,26 @@ public:
     Progression()
     {}
 
-    Progression(std::vector<Chord> iChords) :
+    /*Progression(std::vector<Chord> iChords) :
         mChords(iChords)
-    {}
+    {}*/
 
-    Progression(std::vector<Chord> iChords, Note iScale, Mode iMode) :
+    Progression(std::vector<Chord> iChords, Note iScale = C, Mode iMode = Ionian, ModeType iModeType = NaturalMode) :
         mChords(iChords),
         mScale(iScale),
-        mMode(iMode)
+        mMode(iMode),
+        mModeType(iModeType)
     {}
 
 
 //=====================================================================================================================
-// REPLICATION OF VECTOR METHODS
+// VECTOR-LIKE METHODS
 //=====================================================================================================================
 
-    Chord& operator[](int iIndex);
     int  size();
     void removeChord(int wIndex);
     void insertChord(Chord iChord, int wIndex);
-
-
-//=====================================================================================================================
-// BASIC HARMONIC STRUCTURAL UNIT
-//=====================================================================================================================
+    Chord& operator[](int i){return mChords[i];}
 
     Progression& append(const Chord& iChord)
     {
@@ -54,11 +57,14 @@ public:
         return *this;
     }
 
+    // More of a utility... TODO: REMOVE THIS
+    std::vector<int> indexList();
 
 //=====================================================================================================================
 // PUBLIC METHODS
 //=====================================================================================================================
 
+    // GET & SET
     std::vector<Chord>& getChords()
     {
         return mChords;
@@ -74,8 +80,37 @@ public:
         return mMode;
     }
 
-    // Returns vector of "remaning chords" ({0,1,2,3}) for Harmony.h use
-    std::vector<int> indexList();
+    ModeType& getModeType()
+    {
+        return mModeType;
+    }
+    Progression& setChords(std::vector<Chord> iChords)
+    {
+        mChords = iChords;
+        refreshChordsModeAndScale();
+        return *this;
+    }
+
+    Progression& setScale(Note iNote)
+    {
+        mScale = iNote;
+        refreshChordsModeAndScale();
+        return *this;
+    }
+
+    Progression& setMode(Mode iMode)
+    {
+        mMode = iMode;
+        refreshChordsModeAndScale();
+        return *this;
+    }
+
+    Progression& setModeType(ModeType iModeType)
+    {
+        mModeType = iModeType;
+        refreshChordsModeAndScale();
+        return *this;
+    }
 
     // PRINTING METHODS
 

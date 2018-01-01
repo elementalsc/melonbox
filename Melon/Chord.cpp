@@ -137,11 +137,13 @@ Chord::printChord(Mode iMode, ModeType iModeType, Note iScale)
         return "";
     }
 
-    int wNoteValue;
+    int wNoteValue = 0;
     Alteration wSharpOrFlat = calculateSharpOrFlat(wScale, wMode, wModeType);
 
     // Getting count of semitones separating note from scale root
-    int wIntervalFromRoot = calculateModeDegreeInterval(mDegree, wMode, wModeType);
+    int wIntervalFromRoot = 0;
+    wIntervalFromRoot = calculateModeDegreeInterval(mDegree, wMode, wModeType);
+    wIntervalFromRoot = rootDegreeInterval(mDegree, wMode, wModeType);
 
     // Preparing secondary degree added interval value
     switch(mSecondaryDegree)
@@ -151,6 +153,15 @@ Chord::printChord(Mode iMode, ModeType iModeType, Note iScale)
     case VII: wNoteValue = 11; break;
     default : break;
     }
+
+    //
+    //
+    //
+    // fill all chord objetc members when initializing progression.
+    //
+    //
+    //
+    //
 
     // Converting result between 0 and 11
     wNoteValue += (wScale + wIntervalFromRoot + mAlteration) % 12;
@@ -219,21 +230,21 @@ Chord::printChord(Mode iMode, ModeType iModeType, Note iScale)
 
 
 std::string
-Chord::intToNote(int iNoteValue, Alteration sharpOrFlat)
+Chord::intToNote(int iNoteValue, Alteration iSharpOrFlat)
 {
     switch(iNoteValue % 12)
     {
     case  C         :    return "C";
-    case (Cs | Db)  :    return sharpOrFlat ? "C#" : "Db";
+    case (Cs | Db)  :    return iSharpOrFlat ? "C#" : "Db";
     case  D         :    return "D";
-    case (Ds | Eb)  :    return sharpOrFlat ? "D#" : "Eb";
+    case (Ds | Eb)  :    return iSharpOrFlat ? "D#" : "Eb";
     case  E         :    return "E";
     case  F         :    return "F";
-    case (Fs | Gb)  :    return sharpOrFlat ? "F#" : "Gb";
+    case (Fs | Gb)  :    return iSharpOrFlat ? "F#" : "Gb";
     case  G         :    return "G";
-    case (Gs | Ab)  :    return sharpOrFlat ? "G#" : "Ab";
+    case (Gs | Ab)  :    return iSharpOrFlat ? "G#" : "Ab";
     case  A         :    return "A";
-    case (As | Bb)  :    return sharpOrFlat ? "A#" : "Bb";
+    case (As | Bb)  :    return iSharpOrFlat ? "A#" : "Bb";
     case  B         :    return "B";
     default:
         logger->log("No valid note passed to intToNote()",Error);

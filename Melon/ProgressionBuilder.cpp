@@ -10,12 +10,15 @@
 Progression
 ProgressionBuilder::generate()
 {
-    Progression oProgression;
+    Progression oProgression({},mScale,mMode,mModeType);
 
     logger->log("Generating progression... ------------------------------------------------");
 
+    // MUST ADD PROPERTIES (SCALES, MODES, ETC... in prog and chords!)
+
     // Recuperate random Harmonic Structural Unit
-    oProgression = hsuList[randomInt(0, hsuList.size()-1)];
+    oProgression.setChords(hsuList[randomInt(0, hsuList.size()-1)]);
+
     logger->logProgression(oProgression, "Basic HSU\t");
 
     // Apply random variations
@@ -24,11 +27,11 @@ ProgressionBuilder::generate()
     // Apply modal mixture
 
     // Apply mode
-    applyModeTriads(oProgression, mMode, NaturalMode);
+    applyModeTriads(oProgression, mMode, mModeType);
 
     // Apply notes
 
-    //logger->log("--------------------------------------------------------------------------\n");
+    logger->log("-------------------------------------------------...progression completed!");
     return oProgression;
 }
 
@@ -146,7 +149,7 @@ ProgressionBuilder::hsuGenericVariation_Substitution(Progression& oProgression)
     for(int i = 0; i < oProgression.size(); ++i)
     {
         wProgIndex = randVectorIndex(wRemainingChords);
-        int wTargetChordDegree = oProgression[wProgIndex].mDegree;
+        int wTargetChordDegree = oProgression[wProgIndex].getDegree();
 
         // If the targeted degree has available substitutions
         if(genericSubstitutions[wTargetChordDegree].size())
@@ -177,7 +180,7 @@ ProgressionBuilder::hsuGenericVariation_Interpolation(Progression& oProgression)
     for(int i = 0; i < oProgression.size(); ++i)
     {
         wProgIndex = randVectorIndex(wRemainingChords);
-        int wTargetChordDegree = oProgression[wProgIndex].mDegree;
+        int wTargetChordDegree = oProgression[wProgIndex].getDegree();
 
         // If the targeted degree has available interpolations
         if(genericInterpolations[wTargetChordDegree].size())
@@ -212,12 +215,12 @@ ProgressionBuilder::hsuAlterativeVariation_AddSecondaryDominant(Progression& oPr
         wProgIndex = randVectorIndex(wRemainingChords);
 
         // Attempt secondary dominant insertion
-        if(!(oProgression[wProgIndex].mDegree == 1 || oProgression[wProgIndex].mDegree == 7 ))
+        if(!(oProgression[wProgIndex].getDegree() == 1 || oProgression[wProgIndex].getDegree()== 7 ))
         {
             // If the previous chord is not a secondary degree, or if it's the first of the progression
-            if((wProgIndex > 0 && oProgression[wProgIndex - 1].mSecondaryDegree == NoSecondaryDegree))
+            if((wProgIndex > 0 && oProgression[wProgIndex - 1].getSecondaryDegree() == NoSecondaryDegree))
             {
-                oProgression.insertChord(Chord(oProgression[wProgIndex].mDegree).setSecondaryDegree(SecondaryDegree::V),wProgIndex);
+                oProgression.insertChord(Chord(oProgression[wProgIndex].getDegree()).setSecondaryDegree(SecondaryDegree::V),wProgIndex);
 
                 logger->logProgression(oProgression, "Inserted secondary fifth : ");
                 return VARIATION_SUCCESS;
@@ -241,13 +244,13 @@ ProgressionBuilder::hsuAlterativeVariation_ModalMixture(Progression& oProgressio
         wProgIndex = randVectorIndex(wRemainingChordIndexes);
 
         // VDMILLET :  ADD NUANCE FOR MAJOR/MINOR MODE           // "1" here is for "Major Mode chord substitutes"
-        Progression wSubstitutes = modalSubstitutions[1][oProgression[i].mDegree];
+        Progression wSubstitutes = modalSubstitutions[1][oProgression[i].getDegree()];
 
         // if this chord has modal substitutes
-        if(wSubstitutes.size() >= 1 && oProgression[wProgIndex].mSecondaryDegree == NoSecondaryDegree)
+        if(wSubstitutes.size() >= 1 && oProgression[wProgIndex].getSecondaryDegree() == NoSecondaryDegree)
         {
             // if the previous chord is not a secondary degree, or if it's the first of the progression
-            if ( (wProgIndex > 0 && oProgression[wProgIndex - 1].mSecondaryDegree == NoSecondaryDegree))
+            if ( (wProgIndex > 0 && oProgression[wProgIndex - 1].getSecondaryDegree() == NoSecondaryDegree))
             {
                 oProgression[wProgIndex] = wSubstitutes[randomInt(0, wSubstitutes.size() - 1)];
                 return VARIATION_SUCCESS;

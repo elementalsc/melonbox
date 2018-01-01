@@ -45,7 +45,7 @@ public:
     void operator=(MelonLogger const&)  = delete;
 
 //=====================================================================================================================
-// LOGGING FUNCTIONS
+// LOGGING METHODS
 //=====================================================================================================================
 
     // Generic logging
@@ -53,8 +53,6 @@ public:
 
     // Progression logging
     void logProgression(Progression& iProgression, std::string iPrefix = "");
-
-
 
 }; // class MelonLogger
 

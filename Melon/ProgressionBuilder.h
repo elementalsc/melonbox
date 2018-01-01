@@ -14,25 +14,27 @@
 class ProgressionBuilder
 {
 
-public:
+private:
 
-    int          mVariationAmount   = 3;
-    Note         mScale             = C;
-    Mode         mMode              = Ionian;
-    ModeType     mModeType          = NaturalMode;
+    int          mVariationAmount;
+    Note         mScale;
+    Mode         mMode;
+    ModeType     mModeType;
     MelonLogger* logger             = logger->getInstance();
+
+public:
 
 //=====================================================================================================================
 // CONSTRUCTORS
 //=====================================================================================================================
 
-    ProgressionBuilder()
-    {}
+    ProgressionBuilder() = delete;
 
-    ProgressionBuilder(int iVariationAmount, Note iScale, Mode iMode) :
+    ProgressionBuilder(int iVariationAmount = 1, Note iScale = C, Mode iMode = Ionian, ModeType iModeType = NaturalMode) :
         mVariationAmount(iVariationAmount),
         mScale(iScale),
-        mMode(iMode)
+        mMode(iMode),
+        mModeType(iModeType)
     {}
 
 
@@ -56,25 +58,25 @@ private:
 //=====================================================================================================================
 // BASIC HARMONIC STRUCTURAL UNIT
 //=====================================================================================================================
-    std::vector<Progression> hsuList =
+    std::vector<std::vector<Chord>> hsuList =
     {
         // V-I
-        Progression({Chord(5), Chord(1)}),
+        {Chord(5), Chord(1)},
 
         // IV-I
-        Progression({Chord(4), Chord(1)}),
+        {Chord(4), Chord(1)},
 
         // II-V-I
-        Progression({Chord(2), Chord(5), Chord(1)}),
+        {Chord(2), Chord(5), Chord(1)},
 
         // VI-V-I
-        Progression({Chord(6), Chord(5), Chord(1)}),
+        {Chord(6), Chord(5), Chord(1)},
 
         // VI-II-V-I
-        Progression({Chord(6), Chord(2), Chord(5), Chord(1)}),
+        {Chord(6), Chord(2), Chord(5), Chord(1)},
 
         // III-II-V-I
-        Progression({Chord(3), Chord(2), Chord(5), Chord(1)})
+        {Chord(3), Chord(2), Chord(5), Chord(1)}
     };
 
 //=====================================================================================================================

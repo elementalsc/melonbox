@@ -7,7 +7,9 @@ using namespace std;
 RootWindow::RootWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::RootWindow)
 {
     ui->setupUi(this);
-    ui->variationNumber->setValue(1);
+    ui->uVariationNumber->setValue(1);
+    ui->uScaleList->setItemSelected(0,true);
+    ui->uModeList->setItemSelected(0,true);
     logger = MelonLogger::getInstance();
 }
 
@@ -22,8 +24,15 @@ void RootWindow::on_pushButton_clicked()
     // [ ] affichage des degreés relativement à Ionien/Aéolien (n'importe quel mode idéalement!)
     // [ ] affichage des noms des accords
 
-    ProgressionBuilder progBuilder;
-    ui->oProgDisplay->append(QString::fromStdString(progBuilder.generate().toString()));
+    Note iNote = static_cast<Note>(ui->uScaleList->currentRow());
+    Mode iMode = static_cast<Mode>(ui->uModeList->currentRow()+1) ;
+    int iVariation = ui->uVariationNumber->value();
+
+    ProgressionBuilder progBuilder(iVariation, iNote, iMode);
+
+    Progression prog = progBuilder.generate();
+    ui->oProgDisplay->append(QString::fromStdString(prog.toString()));
+    ui->oProgDisplay->append(QString::fromStdString(prog.printChords()));
 
 }
 
