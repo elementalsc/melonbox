@@ -7,9 +7,14 @@ using namespace std;
 RootWindow::RootWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::RootWindow)
 {
     ui->setupUi(this);
-    ui->uVariationNumber->setValue(1);
-    ui->uScaleList->setItemSelected(0,true);
-    ui->uModeList->setItemSelected(0,true);
+    ui->uVariationNumber->setValue(1);/*
+    ui->uScaleList->item(0)->setSelected(true);
+    ui->uModeList->item(0)->setSelected(true);
+    ui->uModeTypeList->item(0)->setSelected(true);*/
+    ui->uScaleList->setCurrentRow(0);
+    ui->uModeList->setCurrentRow(0);
+    ui->uModeTypeList->setCurrentRow(0);
+    ui->pushButton->setFocus();
     logger = MelonLogger::getInstance();
 }
 
@@ -22,13 +27,13 @@ void RootWindow::on_pushButton_clicked()
 {
     // [ ] mixture modale
     // [ ] affichage des degreés relativement à Ionien/Aéolien (n'importe quel mode idéalement!)
-    // [ ] affichage des noms des accords
 
     Note iNote = static_cast<Note>(ui->uScaleList->currentRow());
-    Mode iMode = static_cast<Mode>(ui->uModeList->currentRow()+1) ;
+    Mode iMode = static_cast<Mode>(ui->uModeList->currentRow()+1);
+    ModeType iModeType = static_cast<ModeType>(ui->uModeTypeList->currentRow()+1);
     int iVariation = ui->uVariationNumber->value();
 
-    ProgressionBuilder progBuilder(iVariation, iNote, iMode);
+    ProgressionBuilder progBuilder(iVariation, iNote, iMode, iModeType);
 
     Progression prog = progBuilder.generate();
     ui->oProgDisplay->append(QString::fromStdString(prog.toString()));

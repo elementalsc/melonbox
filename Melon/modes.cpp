@@ -53,7 +53,7 @@ Position(Mode mode, int degree)
 //	INSERTING MODE CHORDS
 //=====================================================================================================================
 int
-applyModeTriads(Progression& oProgression, Mode iMode = Ionian, ModeType iModeType = NaturalMode)
+applyModeTriads(Progression& oProgression, Mode iMode, ModeType iModeType)
 {
     MelonLogger* logger = logger->getInstance();
 

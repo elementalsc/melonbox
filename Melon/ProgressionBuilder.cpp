@@ -58,7 +58,7 @@ ProgressionBuilder::applyVariation(Progression& oProgression, int iVariationAmou
 
             if((this->*iVariationFunctions[wCase])(oProgression))
             {
-                return VARIATION_SUCCESS;
+                continue;
             }
             else
             {
