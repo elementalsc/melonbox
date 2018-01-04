@@ -7,10 +7,7 @@ using namespace std;
 RootWindow::RootWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::RootWindow)
 {
     ui->setupUi(this);
-    ui->uVariationNumber->setValue(1);/*
-    ui->uScaleList->item(0)->setSelected(true);
-    ui->uModeList->item(0)->setSelected(true);
-    ui->uModeTypeList->item(0)->setSelected(true);*/
+    ui->uVariationNumber->setValue(1);
     ui->uScaleList->setCurrentRow(0);
     ui->uModeList->setCurrentRow(0);
     ui->uModeTypeList->setCurrentRow(0);

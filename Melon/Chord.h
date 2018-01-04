@@ -231,6 +231,12 @@ public:
         return *this;
     }
 
+    Chord& setTriad(Triad&& iTriad)
+    {
+        mTriad = std::move(iTriad);
+        return *this;
+    }
+
     Triad& getTriad()
     {
         return mTriad;

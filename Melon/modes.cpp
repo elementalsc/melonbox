@@ -1,54 +1,6 @@
 #include "Modes.h"
 #include "Progression.h"
 
-int
-Intervals(Mode mode, int degree)
-{
-    switch (mode)
-    {
-    case 1: return ionianInterval[degree];
-    case 2: return dorianInterval[degree];
-    case 3: return phrygianInterval[degree];
-    case 4: return lydianInterval[degree];
-    case 5: return mixolydianInterval[degree];
-    case 6: return aeolianInterval[degree];
-    case 7: return locrianInterval[degree];
-    default: return -1;
-    }
-}
-
-int
-NextTriad(Mode mode, int degree)
-{
-    switch (mode)
-    {
-    case 1: return ionianNextTriad[degree];
-    case 2: return dorianNextTriad[degree];
-    case 3: return phrygianNextTriad[degree];
-    case 4: return lydianNextTriad[degree];
-    case 5: return mixolydianNextTriad[degree];
-    case 6: return aeolianNextTriad[degree];
-    case 7: return locrianNextTriad[degree];
-    default: return -1;
-    }
-}
-
-int
-Position(Mode mode, int degree)
-{
-    switch (mode)
-    {
-    case 1: return ionianPosition[degree];
-    case 2: return dorianPosition[degree];
-    case 3: return phrygianPosition[degree];
-    case 4: return lydianPosition[degree];
-    case 5: return mixolydianPosition[degree];
-    case 6: return aeolianPosition[degree];
-    case 7: return locrianPosition[degree];
-    default: return -1;
-    }
-}
-
 //=====================================================================================================================
 //	INSERTING MODE CHORDS
 //=====================================================================================================================

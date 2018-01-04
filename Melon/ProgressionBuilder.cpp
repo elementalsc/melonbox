@@ -14,17 +14,17 @@ ProgressionBuilder::generate()
 
     logger->log("Generating progression... ------------------------------------------------");
 
-    // MUST ADD PROPERTIES (SCALES, MODES, ETC... in prog and chords!)
-
     // Recuperate random Harmonic Structural Unit
     oProgression.setChords(hsuList[randomInt(0, hsuList.size()-1)]);
 
     logger->logProgression(oProgression, "Basic HSU\t");
 
     // Apply random variations
-    applyVariation(oProgression,mVariationAmount,allVariationFunctions);
+    // TODO: add a variation memento, at least to look back if certain modifications are made
+    applyVariation(oProgression,mVariationAmount,basicVariationFunctions);
 
     // Apply modal mixture
+    //applyModalVariation(oProgression,mVariationAmount,modalVariationFunctions);
 
     // Apply mode
     applyModeTriads(oProgression, mMode, mModeType);
@@ -58,17 +58,23 @@ ProgressionBuilder::applyVariation(Progression& oProgression, int iVariationAmou
 
             if((this->*iVariationFunctions[wCase])(oProgression))
             {
-                continue;
+                logger->log("Variations applied", Trace);
+                break;
             }
             else
             {
                 removeEraseValue(wRemainingVariations,wCase);
+                if (!wRemainingVariations.size())
+                {
+                    logger->log("Variation failure", Warning);
+                    return VARIATION_FAILURE;
+                }
             }
         }
     }
 
-    logger->log("Variation failure", Warning);
-    return VARIATION_FAILURE;
+    logger->log("Completed basic variations", Trace);
+    return VARIATION_SUCCESS;
 }
 
 
@@ -231,10 +237,93 @@ ProgressionBuilder::hsuAlterativeVariation_AddSecondaryDominant(Progression& oPr
     return VARIATION_FAILURE;
 }
 
+int
+ProgressionBuilder::hsuAlterativeVariation_MajorMinorSubstitution(Progression& oProgression)
+{
+    std::vector<int>    wCandidateDegrees;
+    bool                wMajorMode;
+
+    // According to mode, determine what degrees might be mixed
+    switch(oProgression.getMode())
+    {
+    // Major modes can switch minor chords to major (II, III, VI, VII)
+    case Ionian :
+    case Lydian :
+    case Mixolydian :
+        wCandidateDegrees = {2,3,6,7};
+        wMajorMode = true;
+        break;
+    // Minor modes can switch fewer major chords to minor (III)
+    case Dorian :
+    case Phrygian :
+    case Aeolian :
+    case Locrian :
+        wCandidateDegrees = {3};
+        wMajorMode = false;
+        break;
+    default:
+        logger->log("Unable to evaluate Progression mode in MajorMinorMixing",Error);
+        return VARIATION_FAILURE;
+        break;
+    }
+
+    // Build vector of chord indexes candidate to mode mixing
+    std::vector<int> wProgressionCandidates;
+
+    for(int wCandidateDegreeIndex = 0; wCandidateDegreeIndex < wCandidateDegrees.size();++wCandidateDegreeIndex)
+    {
+        for(int wProgChordIndex = 0; wProgChordIndex < oProgression.size(); ++wProgChordIndex)
+        {
+            if(oProgression[wProgChordIndex].getDegree() == wCandidateDegrees[wCandidateDegreeIndex])
+            {
+                wProgressionCandidates.push_back(wProgChordIndex);
+            }
+        }
+    }
+
+    if(!wProgressionCandidates.size())
+    {
+        logger->log("No available candidate for MajorMinorMixing in progression",Warning);
+        return VARIATION_FAILURE;
+    }
+
+    if(wMajorMode)
+    {
+        oProgression[randVectorIndex(wProgressionCandidates)].setTriad(MinorTriad);
+    }
+    else
+    {
+        oProgression[randVectorIndex(wProgressionCandidates)].setTriad(MajorTriad);
+    }
+
+    logger->logProgression(oProgression, "MajorMinorMix : ");
+    return VARIATION_SUCCESS;
+}
+
 // Substitute a chord with a chord from another mode
 int
-ProgressionBuilder::hsuAlterativeVariation_ModalMixture(Progression& oProgression)
+ProgressionBuilder::hsuAlterativeVariation_AnyModalMixture(Progression& oProgression)
 {
+
+    // Mode mixte (changer un accord majeur en mineur, et inversement)
+    // Ne pas utiliser deux accords mixte de manière consécutive
+    // Fait pour se substituer à un accord STANDARD
+    // II substitué pour N (IIb6), ou IV dans le contexte IV - I
+
+    // En majeur....
+    // Interpolation entre des accords "synonymes" pour accroître la tension
+        // II - V -> II - IImm - V
+        // IV - V -> IV - IVmm - V
+        // IV - V -> IV - IImm - V
+    // Emprunt de III, VI, VII mineur
+
+    // En mineur...
+    // Majorisation de I ou de VI à la fin de la progression
+    // Emprunt du III majeur
+
+
+    // comparer à un mode et voir si on a pas trop de notes différentes de la gamme initiale
+    // conserver une mémoire des notes étrangères déjà utilisées
 
     std::vector<int> wRemainingChordIndexes = oProgression.indexList();
     int              wProgIndex;

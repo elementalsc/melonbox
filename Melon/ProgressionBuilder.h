@@ -52,7 +52,9 @@ private:
 //=====================================================================================================================
 
     // This function will RANDOMLY attempt the available hsu variations on RANDOMLY selected chords of the progression
-    int applyVariation(Progression& oProgression, int iVariationAmount, std::vector<VARIATION_FUNCTION_POINTER> iVariationFunctions);
+    int applyVariation(Progression& oProgression, int iVariationAmount, std::vector<VARIATION_FUNCTION_POINTER> iVariationFunctions);// This function will RANDOMLY attempt the available hsu variations on RANDOMLY selected chords of the progression
+
+    int applyModalVariation(Progression& oProgression, int iVariationAmount, std::vector<VARIATION_FUNCTION_POINTER> iVariationFunctions);
 
 
 //=====================================================================================================================
@@ -199,8 +201,11 @@ private:
     // Insert a secondary fifth degree on a randomly selected chord that is not a tonic or leading
     int hsuAlterativeVariation_AddSecondaryDominant(Progression& oProgression);
 
+    // Change III, VI or VII from minor to major or III from major to minor
+    int hsuAlterativeVariation_MajorMinorSubstitution(Progression& oProgression);
+
     // Substitute a chord with a chord from another mode
-    int hsuAlterativeVariation_ModalMixture(Progression& oProgression);
+    int hsuAlterativeVariation_AnyModalMixture(Progression& oProgression);
 
 //=====================================================================================================================
 // HSU VARIATION FUNCTIONS LIST
@@ -216,6 +221,23 @@ private:
         hsuAlterativeVariation_AddSecondaryDominant/*,
         hsuAlterativeVariation_ModalMixture*/
     };
+
+    std::vector<VARIATION_FUNCTION_POINTER> basicVariationFunctions =
+    {
+        hsuBasicVariation_AddTonicAtBeggining,
+        hsuBasicVariation_SubstituteFiveOneResolution,
+        hsuBasicVariation_StopProgAfterDominant,
+        hsuGenericVariation_Substitution,
+        hsuGenericVariation_Interpolation
+    };
+
+    std::vector<VARIATION_FUNCTION_POINTER> modalVariationFunctions =
+    {
+        hsuAlterativeVariation_AddSecondaryDominant,
+        hsuAlterativeVariation_MajorMinorSubstitution,
+        hsuAlterativeVariation_AnyModalMixture
+    };
+
 
 }; // class ProgressionBuilder
 
