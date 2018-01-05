@@ -178,6 +178,7 @@ public:
     Chord& setScale(Note& iNote)
     {
         mScale = iNote;
+        // TODO : implement refreshNotes()
         return *this;
     }
 
@@ -194,6 +195,7 @@ public:
     Chord& setRoot(Note& iNote)
     {
         mRoot = iNote;
+        // TODO : implement refreshNotes()
         return *this;
     }
 
@@ -205,6 +207,7 @@ public:
     Chord& setMode(Mode& iMode)
     {
         mMode = iMode;
+        // TODO : implement refreshNotes()
         return *this;
     }
 
@@ -217,6 +220,7 @@ public:
     Chord& setModeType(ModeType& iModeType)
     {
         mModeType = iModeType;
+        // TODO : implement refreshNotes()
         return *this;
     }
 
@@ -228,12 +232,14 @@ public:
     Chord& setTriad(Triad& iTriad)
     {
         mTriad = iTriad;
+        // TODO : implement refreshNotes()
         return *this;
     }
 
     Chord& setTriad(Triad&& iTriad)
     {
         mTriad = std::move(iTriad);
+        // TODO : implement refreshNotes()
         return *this;
     }
 
@@ -245,6 +251,7 @@ public:
     Chord& setInversion(Inversion& iInversion)
     {
         mInversion = iInversion;
+        // TODO : implement refreshNotes()
         return *this;
     }
 
@@ -256,6 +263,7 @@ public:
     Chord& setAlteration(Alteration& iAlteration)
     {
         mAlteration = iAlteration;
+        // TODO : implement refreshNotes()
         return *this;
     }
 
@@ -267,6 +275,7 @@ public:
     Chord& setAdd(AddedDegree& iAddedDegree)
     {
         mAddedDegree = iAddedDegree;
+        // TODO : implement refreshNotes()
         return *this;
     }
 
@@ -278,6 +287,7 @@ public:
     Chord& setSus(SuspendedDegree& iSuspendedDegree)
     {
         mSuspendedDegree = iSuspendedDegree;
+        // TODO : implement refreshNotes()
         return *this;
     }
 
@@ -289,12 +299,14 @@ public:
     Chord& setSecondaryDegree(SecondaryDegree& iSecondaryDegree)
     {
         mSecondaryDegree = iSecondaryDegree;
+        // TODO : implement refreshNotes()
         return *this;
     }
 
     Chord& setSecondaryDegree(SecondaryDegree&& iSecondaryDegree)
     {
         mSecondaryDegree = std::move(iSecondaryDegree);
+        // TODO : implement refreshNotes()
         return *this;
     }
 
@@ -303,6 +315,10 @@ public:
         return mSecondaryDegree;
     }
 
+    std::vector<int>& getNotes()
+    {
+        return mNotes;
+    }
 //=====================================================================================================================
 //	OPERATORS
 //=====================================================================================================================

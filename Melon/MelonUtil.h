@@ -27,7 +27,7 @@ int randVectorIndex(std::vector<T>& iVector)
 }
 
 template <class T, class V>
-void removeEraseValue(std::vector<T>& oVector, V& valueToRemove)
+void removeEraseValue(std::vector<T>& oVector, V valueToRemove)
 {
     oVector.erase(std::remove(oVector.begin(),oVector.end(),valueToRemove),oVector.end());
 }

@@ -56,6 +56,7 @@ private:
 
     int applyModalVariation(Progression& oProgression, int iVariationAmount, std::vector<VARIATION_FUNCTION_POINTER> iVariationFunctions);
 
+    std::vector<int> getChordNotes(Chord iChord);
 
 //=====================================================================================================================
 // BASIC HARMONIC STRUCTURAL UNIT
@@ -204,8 +205,14 @@ private:
     // Change III, VI or VII from minor to major or III from major to minor
     int hsuAlterativeVariation_MajorMinorSubstitution(Progression& oProgression);
 
+    // Insert mixed II or IV chord in II - V or IV - V progression
+    int hsuAlterativeVariation_MajorMinorInterpolation(Progression& oProgression);
+
+    // Substitute II or IV (in IV - V context) for IIb6
+    int hsuAlterativeVariation_NeapolitanSixth(Progression& oProgression);
+
     // Substitute a chord with a chord from another mode
-    int hsuAlterativeVariation_AnyModalMixture(Progression& oProgression);
+    int hsuAlterativeVariation_AnyModalMixture(Progression& oProgression, int iStrangerNotesAllowed);
 
 //=====================================================================================================================
 // HSU VARIATION FUNCTIONS LIST
@@ -235,7 +242,7 @@ private:
     {
         hsuAlterativeVariation_AddSecondaryDominant,
         hsuAlterativeVariation_MajorMinorSubstitution,
-        hsuAlterativeVariation_AnyModalMixture
+        hsuAlterativeVariation_MajorMinorInterpolation
     };
 
 

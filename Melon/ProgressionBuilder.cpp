@@ -244,27 +244,15 @@ ProgressionBuilder::hsuAlterativeVariation_MajorMinorSubstitution(Progression& o
     bool                wMajorMode;
 
     // According to mode, determine what degrees might be mixed
-    switch(oProgression.getMode())
+    if(isMajorMode(oProgression.getMode()))
     {
-    // Major modes can switch minor chords to major (II, III, VI, VII)
-    case Ionian :
-    case Lydian :
-    case Mixolydian :
         wCandidateDegrees = {2,3,6,7};
         wMajorMode = true;
-        break;
-    // Minor modes can switch fewer major chords to minor (III)
-    case Dorian :
-    case Phrygian :
-    case Aeolian :
-    case Locrian :
+    }
+    else
+    {
         wCandidateDegrees = {3};
         wMajorMode = false;
-        break;
-    default:
-        logger->log("Unable to evaluate Progression mode in MajorMinorMixing",Error);
-        return VARIATION_FAILURE;
-        break;
     }
 
     // Build vector of chord indexes candidate to mode mixing
@@ -296,58 +284,182 @@ ProgressionBuilder::hsuAlterativeVariation_MajorMinorSubstitution(Progression& o
         oProgression[randVectorIndex(wProgressionCandidates)].setTriad(MajorTriad);
     }
 
-    logger->logProgression(oProgression, "MajorMinorMix : ");
+    logger->logProgression(oProgression, "Major<->Minor substitution : ");
+    return VARIATION_SUCCESS;
+}
+int
+ProgressionBuilder::hsuAlterativeVariation_MajorMinorInterpolation(Progression& oProgression)
+{
+    // Major mode possible interpolation
+    // II - V -> II - [II | IV]mm - V
+    // IV - V -> II - [II | IV]mm - V
+
+    if(!isMajorMode(oProgression.getMode()))
+    {
+        logger->log("Can't use MajorMinorInterpolation with minor mode",Warning);
+        return VARIATION_FAILURE;
+    }
+
+    // Build vector of chord indexes candidate to mode mixing
+    std::vector<int> wProgressionCandidates;
+
+    for(int wProgChordIndex = 0; wProgChordIndex < oProgression.size(); ++wProgChordIndex)
+    {
+        if((oProgression[wProgChordIndex].getDegree() == 2 || oProgression[wProgChordIndex].getDegree() == 4)
+          // TODO :  add overflow protection here
+          && oProgression[wProgChordIndex + 1].getDegree() == 5 )
+        {
+            wProgressionCandidates.push_back(wProgChordIndex);
+        }
+    }
+
+    if(!wProgressionCandidates.size())
+    {
+        logger->log("No available candidate for MajorMinorInterpolation in progression",Warning);
+        return VARIATION_FAILURE;
+    }
+
+    // Insert II or IV, keep inversion
+    if(probability(50))
+    {
+        int wProgressionIndex = randVectorIndex(wProgressionCandidates);
+        oProgression.insertChord(Chord(2).setTriad(MajorTriad).setInversion(oProgression[wProgressionIndex].getInversion()), wProgressionIndex + 1);
+    }
+    else
+    {
+        int wProgressionIndex = randVectorIndex(wProgressionCandidates);
+        oProgression.insertChord(Chord(4).setTriad(MinorTriad).setInversion(oProgression[wProgressionIndex].getInversion()), wProgressionIndex + 1);
+    }
+
+    logger->logProgression(oProgression, "Major<->Minor interpolation : ");
+    return VARIATION_SUCCESS;
+}
+
+int
+ProgressionBuilder::hsuAlterativeVariation_NeapolitanSixth(Progression& oProgression)
+{
+    // Build vector of chord indexes candidate to mode mixing
+    std::vector<int> wProgressionCandidates;
+
+    for(int wProgChordIndex = 0; wProgChordIndex < oProgression.size(); ++wProgChordIndex)
+    {
+        if(oProgression[wProgChordIndex].getDegree() == 2         // TODO : add overflow protection here
+           || (oProgression[wProgChordIndex].getDegree() == 4 && oProgression[wProgChordIndex + 1].getDegree() == 5))
+        {
+            wProgressionCandidates.push_back(wProgChordIndex);
+        }
+    }
+
+    if(!wProgressionCandidates.size())
+    {
+        logger->log("No available candidate for NeapolitanSixth in progression",Warning);
+        return VARIATION_FAILURE;
+    }
+
+    oProgression[randVectorIndex(wProgressionCandidates)] = Chord(2,MajorTriad,Six,Flat);
+    logger->logProgression(oProgression, "Neopolitan sixth : ");
     return VARIATION_SUCCESS;
 }
 
 // Substitute a chord with a chord from another mode
 int
-ProgressionBuilder::hsuAlterativeVariation_AnyModalMixture(Progression& oProgression)
+ProgressionBuilder::hsuAlterativeVariation_AnyModalMixture(Progression& oProgression, int iStrangerNotesAllowed)
 {
 
-    // Mode mixte (changer un accord majeur en mineur, et inversement)
-    // Ne pas utiliser deux accords mixte de manière consécutive
-    // Fait pour se substituer à un accord STANDARD
-    // II substitué pour N (IIb6), ou IV dans le contexte IV - I
-
-    // En majeur....
-    // Interpolation entre des accords "synonymes" pour accroître la tension
-        // II - V -> II - IImm - V
-        // IV - V -> IV - IVmm - V
-        // IV - V -> IV - IImm - V
-    // Emprunt de III, VI, VII mineur
-
-    // En mineur...
-    // Majorisation de I ou de VI à la fin de la progression
-    // Emprunt du III majeur
-
-
-    // comparer à un mode et voir si on a pas trop de notes différentes de la gamme initiale
-    // conserver une mémoire des notes étrangères déjà utilisées
-
     std::vector<int> wRemainingChordIndexes = oProgression.indexList();
-    int              wProgIndex;
 
-    for(unsigned int i = 0; ( i < oProgression.size()); ++i)
+    // No modal mixture on 1st chord to stabilize progression root
+    removeEraseValue(wRemainingChordIndexes, 0);
+
+    int         wProgIndex;
+    Mode        wMode = oProgression.getMode();
+    ModeType    wModeType = oProgression.getModeType();
+
+    for(int i = 0; i < oProgression.size(); ++i)
     {
+
+        // take a degree of the progression
         wProgIndex = randVectorIndex(wRemainingChordIndexes);
 
-        // VDMILLET :  ADD NUANCE FOR MAJOR/MINOR MODE           // "1" here is for "Major Mode chord substitutes"
-        Progression wSubstitutes = modalSubstitutions[1][oProgression[i].getDegree()];
+        // establish degrees note according to mode
+        std::vector<int> wSourceChordNotes = getChordNotes(oProgression[wProgIndex]);
 
-        // if this chord has modal substitutes
-        if(wSubstitutes.size() >= 1 && oProgression[wProgIndex].getSecondaryDegree() == NoSecondaryDegree)
+
+        // Remove current mode from candidates
+        std::vector<Mode> wRemainingModes = {Ionian, Dorian, Phrygian, Lydian, Mixolydian, Aeolian, Locrian};
+
+        removeEraseValue(wRemainingModes, wMode);
+
+        // Attempt substitution for other mode
+        Chord wModeChord;
+        Mode wModeAttempted;
+        for(int j = 0; j < wRemainingModes.size(); ++j)
         {
-            // if the previous chord is not a secondary degree, or if it's the first of the progression
-            if ( (wProgIndex > 0 && oProgression[wProgIndex - 1].getSecondaryDegree() == NoSecondaryDegree))
+            wModeAttempted = wRemainingModes[randVectorIndex(wRemainingModes)];
+            wModeChord = oProgression[wProgIndex];
+
+            // Find other mode chord notes
+            std::vector<int> wModeChordNotes = getChordNotes(wModeChord.setMode(wModeAttempted));
+
+            for(int k = 0; k < wModeChordNotes.size(); ++k)
             {
-                oProgression[wProgIndex] = wSubstitutes[randomInt(0, wSubstitutes.size() - 1)];
+                wModeChordNotes[k] =- wSourceChordNotes[k];
+            }
+
+            // Count in wModeChordNotes how many notes were different
+            if(std::count_if(wModeChordNotes.begin(), wModeChordNotes.end(), [](int i){return i == 0;}) <= iStrangerNotesAllowed)
+            {
+                oProgression[wProgIndex].setMode(wModeAttempted);
+                logger->logProgression(oProgression, "Modal mixture : ");
                 return VARIATION_SUCCESS;
             }
+
         }
+
+        // Try other degree of progression if no success
+        removeEraseValue(wRemainingChordIndexes, wProgIndex);
     }
 
+    logger ->log("Unable to realize modal mixture on chord", Warning);
     return VARIATION_FAILURE;
 }
 
+std::vector<int>
+ProgressionBuilder::getChordNotes(Chord iChord)
+{
+    // If iChord already has notes
+    if(iChord.getNotes().size())
+    {
+        return iChord.getNotes();
+    }
 
+    // TODO : improve this (generate chord notes at initialization? check all chord parameters?...)
+
+    std::vector<int> oNotes;
+    std::vector<int> wScale = getModeScale(iChord.getMode(), iChord.getModeType());
+
+    // Get first chord note on scale
+    oNotes.push_back(wScale[iChord.getDegree()]);
+
+    // Get 2nd note
+    if(oNotes[0] <= 5)
+    {
+        oNotes.push_back(wScale[iChord.getDegree() + 2]);
+    }
+    else
+    {
+        oNotes.push_back(wScale[iChord.getDegree() - 5]);
+    }
+
+    // Get 3nd note
+    if(oNotes[1] <= 5)
+    {
+        oNotes.push_back(wScale[iChord.getDegree() + 2]);
+    }
+    else
+    {
+        oNotes.push_back(wScale[iChord.getDegree() - 5]);
+    }
+
+    return oNotes;
+}
