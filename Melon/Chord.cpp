@@ -154,15 +154,6 @@ Chord::printChord(Mode iMode, ModeType iModeType, Note iScale)
     default : break;
     }
 
-    //
-    //
-    //
-    // fill all chord objetc members when initializing progression.
-    //
-    //
-    //
-    //
-
     // Converting result between 0 and 11
     wNoteValue += (wScale + wIntervalFromRoot + mAlteration) % 12;
 
@@ -298,4 +289,66 @@ Chord::calculateEquivalentIonianRoot(Note iScale, Mode iMode, ModeType iModeType
     std::accumulate(wBaseIntervalVector.begin() + wBaseIntervalVector[iMode - 1], wBaseIntervalVector.end(), wIonianNoteDistance);
 
     return static_cast<Note>((iScale + wIonianNoteDistance) % 12);
+}
+
+void
+Chord::refreshNotes()
+{
+    std::vector<int>    wModeScale;
+    Triad               wTriad;
+    std::vector<int>    wNotes;
+    Mode                wMode;
+    ModeType            wModeType;
+
+    // Validate corechord parameters or place default values
+    if(mMode != NoDefinedMode && mModeType != NoDefinedModeType)
+    {
+        wMode = mMode;
+        wModeType = mModeType;
+        wModeScale = getModeScale(mMode,mModeType);
+    }
+    else
+    {
+        wMode = Ionian;
+        wModeType = NaturalMode;
+        wModeScale = naturalIonianScale;
+    }
+
+    if(mTriad != NoDefinedTriad)
+    {
+        wTriad = mTriad;
+    }
+    else
+    {
+        wTriad = MajorTriad;
+    }
+
+    // TODO : complete correctly this method
+
+    int wRootNote = wModeScale[mDegree]; // according to mode
+    wNotes.push_back(wRootNote);
+    wNotes.push_back(NextTriadNote(wNotes[0],wMode, wModeType));
+    wNotes.push_back(NextTriadNote(wNotes[1],wMode, wModeType));
+
+    // sus
+
+
+    // add
+
+
+    // secondary degree
+
+
+    // alteration
+
+}
+
+int
+Chord::NextTriadNote(int iStartingNote, Mode iMode, ModeType iModeType)
+{
+    std::vector<int> wModeScale = getModeScale(iMode, iModeType);
+
+    int wRootIndex= distance(wModeScale.begin(), find(wModeScale.begin(), wModeScale.end(), iStartingNote));
+
+    return ((wRootIndex + 2) > 7 ) ? wModeScale[wRootIndex + 2] : wModeScale[wRootIndex - 5];
 }

@@ -30,7 +30,15 @@ void RootWindow::on_pushButton_clicked()
     ModeType iModeType = static_cast<ModeType>(ui->uModeTypeList->currentRow()+1);
     int iVariation = ui->uVariationNumber->value();
 
-    ProgressionBuilder progBuilder(iVariation, iNote, iMode, iModeType);
+    ModalMixtureParameters iModalMixtureParameters =
+    {
+        ui->uCheckSecondaryDominant->isChecked(),
+        ui->uCheckNeopolitan->isChecked(),
+        ui->uCheckMajorMinor->isChecked(),
+        ui->uCheckModalMixture->isChecked()
+    };
+
+    ProgressionBuilder progBuilder(iVariation, iNote, iMode, iModeType,iModalMixtureParameters);
 
     Progression prog = progBuilder.generate();
     ui->oProgDisplay->append(QString::fromStdString(prog.toString()));

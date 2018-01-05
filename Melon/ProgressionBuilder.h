@@ -11,6 +11,16 @@
 #define VARIATION_SUCCESS 1
 #define VARIATION_FAILURE 0
 
+struct ModalMixtureParameters
+{
+    bool mSecondaryDominant;
+    bool mNeopolitanSixth;
+    bool mMajorMinor;
+    bool mModalMixture;
+};
+
+static ModalMixtureParameters defaultModalMixtureParameters = {false, false, false,false};
+
 class ProgressionBuilder
 {
 
@@ -20,6 +30,7 @@ private:
     Note         mScale;
     Mode         mMode;
     ModeType     mModeType;
+    ModalMixtureParameters mModalMixtureParameters;
     MelonLogger* logger             = logger->getInstance();
 
 public:
@@ -30,11 +41,12 @@ public:
 
     ProgressionBuilder() = delete;
 
-    ProgressionBuilder(int iVariationAmount = 1, Note iScale = C, Mode iMode = Ionian, ModeType iModeType = NaturalMode) :
+    ProgressionBuilder(int iVariationAmount = 1, Note iScale = C, Mode iMode = Ionian, ModeType iModeType = NaturalMode, ModalMixtureParameters iModalMixtureParemeters = defaultModalMixtureParameters) :
         mVariationAmount(iVariationAmount),
         mScale(iScale),
         mMode(iMode),
-        mModeType(iModeType)
+        mModeType(iModeType),
+        mModalMixtureParameters(iModalMixtureParemeters)
     {}
 
 
@@ -53,8 +65,6 @@ private:
 
     // This function will RANDOMLY attempt the available hsu variations on RANDOMLY selected chords of the progression
     int applyVariation(Progression& oProgression, int iVariationAmount, std::vector<VARIATION_FUNCTION_POINTER> iVariationFunctions);// This function will RANDOMLY attempt the available hsu variations on RANDOMLY selected chords of the progression
-
-    int applyModalVariation(Progression& oProgression, int iVariationAmount, std::vector<VARIATION_FUNCTION_POINTER> iVariationFunctions);
 
     std::vector<int> getChordNotes(Chord iChord);
 
@@ -137,41 +147,6 @@ private:
         {},
     };
 
-    // créer un algorithme qui donne des accords de substitution selon la gamme et le mode utiliser
-    // utiliser des critères comme...
-    //      "pas plus d'une ou deux notes hors gamme"
-    //      "interdiction de modifier tonique ou dominante"
-    std::vector<std::vector<Progression>> modalSubstitutions =
-    {
-        // index 0 empty for readability
-        {},
-        {
-            // index 0 empty for readability
-            {},
-
-            // 1st degree : Parallel minor
-            Progression({Chord(1, Triad::MinorTriad)}),
-
-            // 2nd degree : Parallel minor, V/II
-            Progression({Chord(2, Triad::MajorTriad)}),
-
-            // 3rd degree : Parallel minor, V/III
-            Progression({Chord(3, Triad::MajorTriad)}),
-
-            // 4th degree : Parallel minor, Neapolitan sixth
-            Progression({Chord(2, Triad::MajorTriad, Inversion::Six, Alteration::Flat)}),
-
-            // 5th degree : Parallel minor, V/V
-            Progression({Chord(5, Triad::MinorTriad)}),
-
-            // 6th degree : Parallel minor, V/VI
-            Progression({Chord(6, Triad::MajorTriad)}),
-
-            // 7th degree : Flat major 7th
-            Progression({Chord(7, Triad::MajorTriad, Alteration::Flat)})
-        }
-    };
-
 //=====================================================================================================================
 // BASIC HARMONIC STRUCTURAL UNIT VARIATIONS
 //=====================================================================================================================
@@ -213,6 +188,8 @@ private:
 
     // Substitute a chord with a chord from another mode
     int hsuAlterativeVariation_AnyModalMixture(Progression& oProgression, int iStrangerNotesAllowed);
+    int hsuAlterativeVariation_ModalMixtureOneStranger(Progression& oProgression);
+    int hsuAlterativeVariation_ModalMixtureTwoStranger(Progression& oProgression);
 
 //=====================================================================================================================
 // HSU VARIATION FUNCTIONS LIST
@@ -225,8 +202,13 @@ private:
         hsuBasicVariation_StopProgAfterDominant,
         hsuGenericVariation_Substitution,
         hsuGenericVariation_Interpolation,
-        hsuAlterativeVariation_AddSecondaryDominant/*,
-        hsuAlterativeVariation_ModalMixture*/
+        hsuAlterativeVariation_AddSecondaryDominant,
+        hsuAlterativeVariation_AddSecondaryDominant,
+        hsuAlterativeVariation_MajorMinorSubstitution,
+        hsuAlterativeVariation_MajorMinorInterpolation,
+        hsuAlterativeVariation_NeapolitanSixth/*,
+        hsuAlterativeVariation_ModalMixtureOneStranger,
+        hsuAlterativeVariation_ModalMixtureTwoStranger*/
     };
 
     std::vector<VARIATION_FUNCTION_POINTER> basicVariationFunctions =
@@ -242,7 +224,11 @@ private:
     {
         hsuAlterativeVariation_AddSecondaryDominant,
         hsuAlterativeVariation_MajorMinorSubstitution,
-        hsuAlterativeVariation_MajorMinorInterpolation
+        hsuAlterativeVariation_MajorMinorInterpolation,
+        hsuAlterativeVariation_NeapolitanSixth,
+        hsuAlterativeVariation_ModalMixtureOneStranger,
+        hsuAlterativeVariation_ModalMixtureTwoStranger
+
     };
 
 

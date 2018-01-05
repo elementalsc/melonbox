@@ -21,13 +21,38 @@ ProgressionBuilder::generate()
 
     // Apply random variations
     // TODO: add a variation memento, at least to look back if certain modifications are made
-    applyVariation(oProgression,mVariationAmount,basicVariationFunctions);
+    applyVariation(oProgression,mVariationAmount,allVariationFunctions);
+
+    // Apply mode before modal mixture
+    applyModeTriads(oProgression, mMode, mModeType);
+/*
+    // TODO : clean this up
+    std::vector<VARIATION_FUNCTION_POINTER> currentModalVariationFunctions;
+    if(mModalMixtureParameters.mSecondaryDominant)
+    {
+        currentModalVariationFunctions.push_back(hsuAlterativeVariation_AddSecondaryDominant);
+    }
+
+    if(mModalMixtureParameters.mNeopolitanSixth)
+    {
+        currentModalVariationFunctions.push_back(hsuAlterativeVariation_NeapolitanSixth);
+    }
+
+    if(mModalMixtureParameters.mMajorMinor)
+    {
+        currentModalVariationFunctions.push_back(hsuAlterativeVariation_MajorMinorInterpolation);
+        currentModalVariationFunctions.push_back(hsuAlterativeVariation_MajorMinorSubstitution);
+    }
+    if(mModalMixtureParameters.mModalMixture)
+    {
+        currentModalVariationFunctions.push_back(hsuAlterativeVariation_ModalMixtureOneStranger);
+        currentModalVariationFunctions.push_back(hsuAlterativeVariation_ModalMixtureTwoStranger);
+    }
 
     // Apply modal mixture
-    //applyModalVariation(oProgression,mVariationAmount,modalVariationFunctions);
+    applyVariation(oProgression,mVariationAmount,currentModalVariationFunctions);
+*/
 
-    // Apply mode
-    applyModeTriads(oProgression, mMode, mModeType);
 
     // Apply notes
 
@@ -237,6 +262,8 @@ ProgressionBuilder::hsuAlterativeVariation_AddSecondaryDominant(Progression& oPr
     return VARIATION_FAILURE;
 }
 
+// Substitution of minor chords to major in major mode
+// Substitution of III to iii in minor mode
 int
 ProgressionBuilder::hsuAlterativeVariation_MajorMinorSubstitution(Progression& oProgression)
 {
@@ -287,13 +314,15 @@ ProgressionBuilder::hsuAlterativeVariation_MajorMinorSubstitution(Progression& o
     logger->logProgression(oProgression, "Major<->Minor substitution : ");
     return VARIATION_SUCCESS;
 }
+
+
+// Major mode possible interpolation
+// II - V -> II - [II | IV]mm - V
+// IV - V -> II - [II | IV]mm - V
+// No interpolation in minor modes
 int
 ProgressionBuilder::hsuAlterativeVariation_MajorMinorInterpolation(Progression& oProgression)
 {
-    // Major mode possible interpolation
-    // II - V -> II - [II | IV]mm - V
-    // IV - V -> II - [II | IV]mm - V
-
     if(!isMajorMode(oProgression.getMode()))
     {
         logger->log("Can't use MajorMinorInterpolation with minor mode",Warning);
@@ -335,6 +364,8 @@ ProgressionBuilder::hsuAlterativeVariation_MajorMinorInterpolation(Progression& 
     return VARIATION_SUCCESS;
 }
 
+
+// Substitute II or IV (in IV - V) for IIb6
 int
 ProgressionBuilder::hsuAlterativeVariation_NeapolitanSixth(Progression& oProgression)
 {
@@ -361,7 +392,23 @@ ProgressionBuilder::hsuAlterativeVariation_NeapolitanSixth(Progression& oProgres
     return VARIATION_SUCCESS;
 }
 
-// Substitute a chord with a chord from another mode
+
+// Substitute a chord with a chord from the same degree in another mode
+// TODO : improve chord note modifications when setting new mode on a chord
+//         --> see Chord.cpp refreshNotes()
+
+int
+ProgressionBuilder::hsuAlterativeVariation_ModalMixtureOneStranger(Progression& oProgression)
+{
+    return hsuAlterativeVariation_AnyModalMixture(oProgression,1);
+}
+
+int
+ProgressionBuilder::hsuAlterativeVariation_ModalMixtureTwoStranger(Progression& oProgression)
+{
+    return hsuAlterativeVariation_AnyModalMixture(oProgression,2);
+}
+
 int
 ProgressionBuilder::hsuAlterativeVariation_AnyModalMixture(Progression& oProgression, int iStrangerNotesAllowed)
 {
@@ -401,6 +448,7 @@ ProgressionBuilder::hsuAlterativeVariation_AnyModalMixture(Progression& oProgres
             // Find other mode chord notes
             std::vector<int> wModeChordNotes = getChordNotes(wModeChord.setMode(wModeAttempted));
 
+            // TODO : evaluate risk of ModeChord and SourceChord vector size difference
             for(int k = 0; k < wModeChordNotes.size(); ++k)
             {
                 wModeChordNotes[k] =- wSourceChordNotes[k];
@@ -424,6 +472,8 @@ ProgressionBuilder::hsuAlterativeVariation_AnyModalMixture(Progression& oProgres
     return VARIATION_FAILURE;
 }
 
+
+// Reach or deduce notes of a chord
 std::vector<int>
 ProgressionBuilder::getChordNotes(Chord iChord)
 {
@@ -436,6 +486,8 @@ ProgressionBuilder::getChordNotes(Chord iChord)
     // TODO : improve this (generate chord notes at initialization? check all chord parameters?...)
 
     std::vector<int> oNotes;
+
+    // TODO : control absence of defined mode at this point
     std::vector<int> wScale = getModeScale(iChord.getMode(), iChord.getModeType());
 
     // Get first chord note on scale

@@ -371,7 +371,8 @@ public:
     // Take and int value and return note string according to MIDI reference (0/12/24/26/48/60/...  = C)
     // Do not return octave number
     std::string intToNote(int iNoteValue, Alteration iSharpOrFlat = Sharp);
-
+    void refreshNotes();
+    int NextTriadNote(int iStartingNote, Mode iMode, ModeType iModeType);
 }; // class Chord
 
 
